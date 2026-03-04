@@ -1,0 +1,144 @@
+import { useState, useCallback, useRef, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/core";
+import { v4 as uuidv4 } from "uuid";
+import type { Report, EarData, SessionInfo, Patient } from "@/types";
+import { DEFAULT_EAR_FINDINGS } from "@/types/findings";
+import { useWorkspace } from "./useWorkspace";
+
+function createEmptyEarData(): EarData {
+  return {
+    findings: { ...DEFAULT_EAR_FINDINGS },
+    marks: { marks: [] },
+    images: [],
+    observations: "",
+  };
+}
+
+export function createEmptyReport(
+  patient: Patient,
+  sessionId: string,
+  examiner: string,
+  equipment: string
+): Report {
+  const now = new Date().toISOString();
+  return {
+    id: uuidv4(),
+    patient_id: patient.id,
+    patient,
+    session_id: sessionId,
+    status: "in_progress" as const,
+    examiner,
+    equipment,
+    right_ear: createEmptyEarData(),
+    left_ear: createEmptyEarData(),
+    conclusion: "",
+    created_at: now,
+    updated_at: now,
+  };
+}
+
+export function useReports() {
+  const { config } = useWorkspace();
+  const [report, setReport] = useState<Report | null>(null);
+  const [saving, setSaving] = useState(false);
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const pendingReport = useRef<Report | null>(null);
+
+  const createSession = useCallback(
+    async (patient: Patient) => {
+      const sessionId = uuidv4();
+      await invoke("create_session", {
+        patientId: patient.id,
+        sessionId,
+      });
+      const r = createEmptyReport(
+        patient,
+        sessionId,
+        config?.examiner ?? "",
+        config?.equipment ?? ""
+      );
+      await invoke("save_report", { report: r });
+      setReport(r);
+      return r;
+    },
+    [config]
+  );
+
+  const saveReport = useCallback(async (r: Report) => {
+    setSaving(true);
+    try {
+      const updated = { ...r, updated_at: new Date().toISOString() };
+      await invoke("save_report", { report: updated });
+      setReport(updated);
+    } finally {
+      setSaving(false);
+    }
+  }, []);
+
+  const loadReport = useCallback(
+    async (patientId: string, sessionId: string) => {
+      const r = await invoke<Report>("load_report", {
+        patientId,
+        sessionId,
+      });
+      setReport(r);
+      return r;
+    },
+    []
+  );
+
+  const updateReport = useCallback(
+    (updater: (prev: Report) => Report) => {
+      setReport((prev) => {
+        if (!prev) return prev;
+        const next = updater(prev);
+        // Auto-save after 2 seconds of inactivity
+        pendingReport.current = next;
+        if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+        autoSaveTimer.current = setTimeout(() => {
+          pendingReport.current = null;
+          const updated = { ...next, updated_at: new Date().toISOString() };
+          invoke("save_report", { report: updated }).catch(console.error);
+        }, 2000);
+        return next;
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+      if (pendingReport.current) {
+        const updated = { ...pendingReport.current, updated_at: new Date().toISOString() };
+        invoke("save_report", { report: updated }).catch(console.error);
+        pendingReport.current = null;
+      }
+    };
+  }, []);
+
+  return { report, setReport, createSession, saveReport, loadReport, updateReport, saving };
+}
+
+export function useSessionList() {
+  const [sessions, setSessions] = useState<SessionInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    try {
+      setLoading(true);
+      const list = await invoke<SessionInfo[]>("list_sessions");
+      setSessions(list);
+    } catch (err) {
+      console.error("Error loading sessions:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return { sessions, loading, reload: load };
+}
