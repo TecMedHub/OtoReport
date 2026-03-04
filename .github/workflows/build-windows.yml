@@ -1,11 +1,10 @@
 name: Build Windows
 
 on:
-  push:
-    branches: [main]
-    tags: ["v*"]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -39,5 +38,15 @@ jobs:
         with:
           name: otoreport-windows
           path: |
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/nsis/*.exe
+
+      - name: Upload to preview release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: preview
+          name: Preview Build
+          prerelease: true
+          files: |
             src-tauri/target/release/bundle/msi/*.msi
             src-tauri/target/release/bundle/nsis/*.exe
