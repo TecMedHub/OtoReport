@@ -42,7 +42,6 @@ export function PhotoGallery({
 
         if (hasEdits) {
           const processed = await compositeAnnotations(rawUrl, img.annotations, img.rotation, null, img.crop);
-          URL.revokeObjectURL(rawUrl);
           cacheKeysRef.current[img.id] = key;
           setThumbnails((prev) => ({ ...prev, [img.id]: processed }));
         } else {

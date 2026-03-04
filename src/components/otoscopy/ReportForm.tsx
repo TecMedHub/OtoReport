@@ -57,8 +57,21 @@ export function ReportForm({ report, onChange, onSave, saving, readOnly }: Repor
         side,
         filename,
       });
-      const blob = new Blob([new Uint8Array(data)]);
-      return URL.createObjectURL(blob);
+      const bytes = new Uint8Array(data);
+      const ext = filename.split(".").pop()?.toLowerCase() ?? "png";
+      const mime =
+        ext === "jpg" || ext === "jpeg"
+          ? "image/jpeg"
+          : ext === "webp"
+            ? "image/webp"
+            : "image/png";
+      return new Promise<string>((resolve, reject) => {
+        const blob = new Blob([bytes], { type: mime });
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     },
     []
   );

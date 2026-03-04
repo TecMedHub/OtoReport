@@ -26,7 +26,6 @@ export function PhotoPreview({
       if (cancelled) return;
       if (crop || rotation !== 0) {
         const processed = await compositeAnnotations(rawUrl, [], rotation, null, crop);
-        URL.revokeObjectURL(rawUrl);
         if (!cancelled) setUrl(processed);
       } else {
         if (!cancelled) setUrl(rawUrl);
@@ -34,7 +33,6 @@ export function PhotoPreview({
     });
     return () => {
       cancelled = true;
-      if (url && !url.startsWith("data:")) URL.revokeObjectURL(url);
     };
   }, [loadImage]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -18,7 +18,7 @@ function displayToIso(display: string): string {
 function isoToDisplay(iso: string): string {
   if (!iso) return "";
   const parts = iso.split("-");
-  if (parts.length !== 3) return iso;
+  if (parts.length !== 3 || parts[0].length !== 4) return iso;
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
 }
 

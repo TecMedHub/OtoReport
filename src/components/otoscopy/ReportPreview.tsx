@@ -9,7 +9,7 @@ import { PdfReport } from "@/components/export/PdfReport";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { renderDiagramToImage } from "@/lib/diagram-renderer";
 import { compositeAnnotations } from "@/lib/annotation-renderer";
-import { blobUrlToDataUrl } from "@/lib/image-utils";
+
 import type { Report, WorkspaceConfig } from "@/types";
 
 const defaultConfig: WorkspaceConfig = {
@@ -117,20 +117,15 @@ export function ReportPreview({
         const hasRotation = img.rotation !== 0;
         const hasCrop = !!img.crop;
         if (hasAnnotations || hasRotation || hasCrop) {
-          const composited = await compositeAnnotations(
+          return await compositeAnnotations(
             rawUrl,
             hasAnnotations ? img.annotations : [],
             img.rotation,
             null,
             img.crop
           );
-          URL.revokeObjectURL(rawUrl);
-          return composited; // ya es data URL (canvas.toDataURL)
         }
-        // Convertir blob URL a data URL para que @react-pdf/renderer lo cargue correctamente
-        const dataUrl = await blobUrlToDataUrl(rawUrl);
-        URL.revokeObjectURL(rawUrl);
-        return dataUrl;
+        return rawUrl;
       } catch (err) {
         console.warn(`Error cargando imagen ${img.filename} (intento ${attempt + 1}):`, err);
         if (attempt === retries) throw err;
