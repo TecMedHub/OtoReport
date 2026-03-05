@@ -60,6 +60,11 @@ pub fn run() {
             commands::export::save_pdf,
             commands::export::save_pdf_to_cache,
             commands::contribute::create_contribution_zip,
+            commands::findings_cache::get_findings_cache_meta,
+            commands::findings_cache::save_findings_cache_meta,
+            commands::findings_cache::save_finding_image,
+            commands::findings_cache::load_finding_image,
+            commands::findings_cache::clear_findings_cache,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,42 +14,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Upload,
+  Download,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { getFindingsLibrary, type LibraryFinding } from "@/lib/findings-library";
-
-const GITHUB_RAW =
-  "https://raw.githubusercontent.com/TecMedHub/Otoreports_findings/main";
-const INDEX_URL = `${GITHUB_RAW}/json/index.json`;
-const IMG_BASE = `${GITHUB_RAW}/img`;
+import {
+  syncFindingsCache,
+  getCachedImageUrl,
+  clearFindingsCache,
+  type SyncProgress,
+} from "@/lib/findings-cache";
 
 type ContributorEntry = { file: string; name: string };
 type Contributors = Record<string, ContributorEntry[]>;
-
-/** Fetch index.json to check connectivity + get contributors map */
-async function fetchIndex(): Promise<{ ok: boolean; contributors: Contributors }> {
-  try {
-    const res = await fetch(INDEX_URL, { cache: "no-cache" });
-    if (!res.ok) return { ok: false, contributors: {} };
-    const data = await res.json();
-    const contributors: Contributors = {};
-    if (data.contributors && typeof data.contributors === "object") {
-      for (const [key, value] of Object.entries(data.contributors)) {
-        if (key === "_comment") continue;
-        if (typeof value === "string") {
-          // Legacy format: string → convert to array
-          contributors[key] = [{ file: `${key}.webp`, name: value }];
-        } else if (Array.isArray(value)) {
-          // New format: array of { file, name }
-          contributors[key] = value as ContributorEntry[];
-        }
-      }
-    }
-    return { ok: true, contributors };
-  } catch {
-    return { ok: false, contributors: {} };
-  }
-}
 
 type ConnectionStatus = "checking" | "online" | "offline";
 type CategoryFilter = "all" | "membrane" | "cae";
@@ -58,29 +35,42 @@ function FindingCard({
   finding,
   isOnline,
   entries,
+  cachedUrls,
 }: {
   finding: LibraryFinding;
   isOnline: boolean;
   entries?: ContributorEntry[];
+  cachedUrls: Map<string, string>;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const images = entries && entries.length > 0
-    ? entries.map((e) => ({ src: `${IMG_BASE}/${e.file}`, name: e.name }))
-    : [{ src: `${IMG_BASE}/${finding.key}.webp`, name: undefined as string | undefined }];
+    ? entries.map((e) => ({
+        file: e.file,
+        name: e.name,
+      }))
+    : [{ file: `${finding.key}.webp`, name: undefined as string | undefined }];
+
   const hasMultiple = images.length > 1;
 
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [imgStatus, setImgStatus] = useState<"loading" | "loaded" | "error">(
-    isOnline ? "loading" : "error"
-  );
+  const [imgStatus, setImgStatus] = useState<"loading" | "loaded" | "error">("loading");
+
+  const current = images[currentIdx];
+  const cachedUrl = cachedUrls.get(current.file);
+  const hasSrc = !!cachedUrl || isOnline;
 
   // Reset status when image changes
   useEffect(() => {
-    if (isOnline) setImgStatus("loading");
-  }, [currentIdx, isOnline]);
+    if (hasSrc) setImgStatus("loading");
+    else setImgStatus("error");
+  }, [currentIdx, hasSrc]);
 
-  const current = images[currentIdx];
+  // Use cached URL if available, otherwise fall back to GitHub
+  const GITHUB_IMG_BASE =
+    "https://raw.githubusercontent.com/TecMedHub/Otoreports_findings/main/img";
+  const imgSrc = cachedUrl || `${GITHUB_IMG_BASE}/${current.file}`;
 
   return (
     <div className="group overflow-hidden rounded-xl border border-border-secondary bg-bg-secondary transition-colors hover:border-accent">
@@ -107,7 +97,7 @@ function FindingCard({
         ) : (
           <>
             <img
-              src={current.src}
+              src={imgSrc}
               alt={finding.label}
               loading="lazy"
               onLoad={() => setImgStatus("loaded")}
@@ -202,13 +192,66 @@ export function FindingsLibrary() {
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [connection, setConnection] = useState<ConnectionStatus>("checking");
   const [contributors, setContributors] = useState<Contributors>({});
+  const [syncProgress, setSyncProgress] = useState<SyncProgress | null>(null);
+  const [cachedUrls, setCachedUrls] = useState<Map<string, string>>(new Map());
+  const isSyncing = useRef(false);
 
-  const sync = useCallback(async () => {
-    setConnection("checking");
-    const result = await fetchIndex();
-    setConnection(result.ok ? "online" : "offline");
-    setContributors(result.contributors);
+  /** Resolve cached URLs for all contributor image files */
+  const resolveCachedUrls = useCallback(async (contribs: Contributors) => {
+    const urls = new Map<string, string>();
+    const filenames = new Set<string>();
+    for (const entries of Object.values(contribs)) {
+      for (const entry of entries) {
+        filenames.add(entry.file);
+      }
+    }
+    await Promise.all(
+      [...filenames].map(async (filename) => {
+        const url = await getCachedImageUrl(filename);
+        if (url) urls.set(filename, url);
+      })
+    );
+    setCachedUrls(urls);
   }, []);
+
+  const sync = useCallback(
+    async (forceResync = false) => {
+      if (isSyncing.current) return;
+      isSyncing.current = true;
+      setConnection("checking");
+
+      try {
+        if (forceResync) {
+          try {
+            await clearFindingsCache();
+          } catch {
+            // Ignore
+          }
+        }
+
+        const result = await syncFindingsCache((progress) => {
+          setSyncProgress(progress);
+        });
+
+        setConnection(result.ok ? "online" : "offline");
+        setContributors(result.contributors);
+
+        if (result.ok) {
+          try {
+            await resolveCachedUrls(result.contributors);
+          } catch {
+            // Cache URLs not available, will use GitHub direct
+          }
+        }
+      } catch (err) {
+        console.error("Sync error:", err);
+        setConnection("offline");
+      } finally {
+        isSyncing.current = false;
+      }
+    },
+    [resolveCachedUrls]
+  );
 
   useEffect(() => {
     sync();
@@ -255,6 +298,8 @@ export function FindingsLibrary() {
       { value: "cae", label: t("findingsLibrary.cae"), count: caeCount },
     ];
 
+  const isDownloading = syncProgress?.status === "downloading";
+
   return (
     <div className="flex h-full flex-col">
       <Header title={t("findingsLibrary.title")} />
@@ -278,7 +323,7 @@ export function FindingsLibrary() {
             </div>
             <button
               type="button"
-              onClick={sync}
+              onClick={() => sync()}
               className="flex items-center gap-1.5 rounded-md bg-bg-secondary px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-bg-tertiary"
             >
               <RefreshCw size={12} />
@@ -287,8 +332,33 @@ export function FindingsLibrary() {
           </div>
         )}
 
+        {/* Sync progress */}
+        {isDownloading && syncProgress && (
+          <div className="mb-4 flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3">
+            <Download size={18} className="shrink-0 text-accent animate-pulse" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-text-primary">
+                {t("findingsLibrary.syncing", "Sincronizando imágenes...")}
+              </p>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="h-1.5 flex-1 rounded-full bg-bg-tertiary overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all duration-300"
+                    style={{
+                      width: `${syncProgress.total > 0 ? (syncProgress.current / syncProgress.total) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-text-tertiary whitespace-nowrap">
+                  {syncProgress.current}/{syncProgress.total}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Checking spinner */}
-        {connection === "checking" && (
+        {connection === "checking" && !isDownloading && (
           <div className="mb-4 flex items-center gap-2 text-sm text-text-tertiary">
             <Loader2 size={14} className="animate-spin" />
             {t("findingsLibrary.loadingImages")}
@@ -320,21 +390,36 @@ export function FindingsLibrary() {
             )}
           </div>
 
-          <div className="flex gap-1 rounded-lg bg-bg-tertiary p-1">
-            {categories.map((cat) => (
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1 rounded-lg bg-bg-tertiary p-1">
+              {categories.map((cat) => (
+                <button
+                  key={cat.value}
+                  type="button"
+                  onClick={() => setCategory(cat.value)}
+                  className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    category === cat.value
+                      ? "bg-accent text-white"
+                      : "text-text-secondary hover:text-text-primary"
+                  }`}
+                >
+                  {cat.label} ({cat.count})
+                </button>
+              ))}
+            </div>
+
+            {/* Re-sync button */}
+            {connection === "online" && (
               <button
-                key={cat.value}
                 type="button"
-                onClick={() => setCategory(cat.value)}
-                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                  category === cat.value
-                    ? "bg-accent text-white"
-                    : "text-text-secondary hover:text-text-primary"
-                }`}
+                onClick={() => sync(true)}
+                disabled={isSyncing.current}
+                className="flex items-center gap-1.5 rounded-lg bg-bg-tertiary p-1.5 text-text-tertiary transition-colors hover:text-text-secondary"
+                title={t("findingsLibrary.resync", "Re-sincronizar imágenes")}
               >
-                {cat.label} ({cat.count})
+                <RefreshCw size={14} />
               </button>
-            ))}
+            )}
           </div>
         </div>
 
@@ -357,6 +442,7 @@ export function FindingsLibrary() {
                 finding={finding}
                 isOnline={connection === "online"}
                 entries={contributors[finding.key]}
+                cachedUrls={cachedUrls}
               />
             ))}
           </div>
