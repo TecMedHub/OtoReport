@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/layout/Header";
 import { PatientList } from "@/components/patients/PatientList";
 import { PatientForm } from "@/components/patients/PatientForm";
@@ -17,19 +18,20 @@ export function Patients() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   async function handleSave(patient: Patient) {
     await save(patient);
     setShowForm(false);
     setEditing(null);
-    toast(editing ? "Paciente actualizado" : "Paciente creado", "success");
+    toast(editing ? t("patients.updated") : t("patients.created"), "success");
   }
 
   async function handleConfirmDelete() {
     if (deleteTarget) {
       await remove(deleteTarget);
       setDeleteTarget(null);
-      toast("Paciente eliminado", "success");
+      toast(t("patients.deleted"), "success");
     }
   }
 
@@ -45,12 +47,12 @@ export function Patients() {
 
   return (
     <>
-      <Header title="Pacientes" />
+      <Header title={t("patients.title")} />
       <div className="flex-1 overflow-auto p-6">
         {showForm ? (
           <div className="mx-auto max-w-lg">
-            <h3 className="mb-4 text-lg font-semibold text-gray-800">
-              {editing ? "Editar Paciente" : "Nuevo Paciente"}
+            <h3 className="mb-4 text-lg font-semibold text-text-primary">
+              {editing ? t("patients.edit") : t("patients.new")}
             </h3>
             <PatientForm
               patient={editing ?? undefined}
@@ -78,17 +80,17 @@ export function Patients() {
       <Dialog
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        title="Confirmar eliminación"
+        title={t("patients.confirmDeleteTitle")}
       >
-        <p className="mb-4 text-sm text-gray-600">
-          ¿Eliminar este paciente y todos sus datos? Esta acción no se puede deshacer.
+        <p className="mb-4 text-sm text-text-secondary">
+          {t("patients.confirmDeleteMessage")}
         </p>
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
-            Cancelar
+            {t("common.cancel")}
           </Button>
           <Button variant="danger" onClick={handleConfirmDelete}>
-            Eliminar
+            {t("common.delete")}
           </Button>
         </div>
       </Dialog>

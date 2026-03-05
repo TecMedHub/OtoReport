@@ -30,40 +30,17 @@ export interface EarMarks {
   marks: QuadrantMark[];
 }
 
-export interface EarFindings {
-  normal: boolean;
-  retraction: boolean;
-  perforation: boolean;
-  effusion: boolean;
-  tympanosclerosis: boolean;
-  cholesteatoma: boolean;
-  inflammation: boolean;
-  cerumen: boolean;
-  foreign_body: boolean;
-  tube: boolean;
-  myringitis: boolean;
-  neomembrane: boolean;
-  cae_normal: boolean;
-  cae_edema: boolean;
-  cae_exostosis: boolean;
-  cae_otorrhea: boolean;
-}
+export type EarFindings = Record<string, boolean>;
 
 export const DEFAULT_EAR_FINDINGS: EarFindings = {
   normal: true,
   retraction: false,
   perforation: false,
   effusion: false,
-  tympanosclerosis: false,
-  cholesteatoma: false,
   inflammation: false,
-  cerumen: false,
-  foreign_body: false,
-  tube: false,
-  myringitis: false,
-  neomembrane: false,
   cae_normal: true,
+  cae_cerumen: false,
   cae_edema: false,
-  cae_exostosis: false,
   cae_otorrhea: false,
+  cae_exostosis: false,
 };

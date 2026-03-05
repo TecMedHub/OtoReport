@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
 import { readFile } from "@tauri-apps/plugin-fs";
-import type { EarData } from "@/types";
+import type { EarData, FindingsCategoryConfig } from "@/types";
 import type { EarSide, EarImage } from "@/types/image";
 import { FindingType, QuadrantName } from "@/types/findings";
 import { FindingsChecklist } from "./FindingsChecklist";
@@ -22,10 +23,14 @@ interface EarPanelProps {
   onChange: (data: EarData) => void;
   onMoveImage?: (image: EarImage) => void;
   readOnly?: boolean;
+  categoriesConfig?: FindingsCategoryConfig[];
 }
 
-export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveImage, readOnly }: EarPanelProps) {
-  const title = side === "right" ? "Oído Derecho (OD)" : "Oído Izquierdo (OI)";
+export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveImage, readOnly, categoriesConfig }: EarPanelProps) {
+  const { t } = useTranslation();
+  const isRight = side === "right" || side === "pre_right" || side === "post_right";
+  const title = isRight ? t("ear.right") : t("ear.left");
+  const diagramSide: "right" | "left" = isRight ? "right" : "left";
   const [selectedFinding, setSelectedFinding] = useState<FindingType | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [previewImage, setPreviewImage] = useState<EarImage | null>(null);
@@ -74,7 +79,7 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
     const selected = await open({
       multiple: true,
       filters: [
-        { name: "Imágenes", extensions: ["png", "jpg", "jpeg", "bmp", "webp"] },
+        { name: t("ear.imageFilterName"), extensions: ["png", "jpg", "jpeg", "bmp", "webp"] },
       ],
     });
     if (selected) {
@@ -98,20 +103,20 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
   }, [previewImage, loadImageUrl]);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <h3 className="mb-4 text-lg font-semibold text-gray-800">{title}</h3>
+    <div className="rounded-xl border border-border-secondary bg-bg-secondary p-4">
+      <h3 className="mb-4 text-lg font-semibold text-text-primary">{title}</h3>
 
       <div className="space-y-4">
         <div className={`flex items-start gap-4${readOnly ? " pointer-events-none opacity-75" : ""}`}>
           <TympanicDiagram
-            side={side}
+            side={diagramSide}
             marks={data.marks}
             selectedFinding={selectedFinding}
             onMarkQuadrant={handleMarkQuadrant}
           />
           <div className="flex-1">
-            <p className="mb-2 text-xs font-medium text-gray-500">
-              Hallazgo a marcar:
+            <p className="mb-2 text-xs font-medium text-text-tertiary">
+              {t("ear.findingToMark")}
             </p>
             <SymbolPalette
               selected={selectedFinding}
@@ -124,12 +129,13 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
           <FindingsChecklist
             findings={data.findings}
             onChange={(findings) => onChange({ ...data, findings })}
+            categoriesConfig={categoriesConfig}
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Observaciones
+          <label className="block text-sm font-medium text-text-secondary">
+            {t("ear.observations")}
           </label>
           <textarea
             value={data.observations}
@@ -138,14 +144,14 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
             }
             disabled={readOnly}
             rows={3}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-            placeholder="Observaciones adicionales..."
+            className="w-full rounded-lg border border-border-primary bg-bg-secondary px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:bg-bg-tertiary disabled:text-text-tertiary"
+            placeholder={t("ear.observationsPlaceholder")}
           />
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium text-gray-700">Imágenes</h4>
+            <h4 className="text-sm font-medium text-text-secondary">{t("ear.images")}</h4>
             {!readOnly && (
               <ImageActions
                 onCapture={() => setShowCamera(true)}
@@ -196,16 +202,17 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
           loadImage={loadPreviewImage}
           rotation={previewImage.rotation}
           crop={previewImage.crop}
+          background={previewImage.background}
           onClose={() => setPreviewImage(null)}
         />
       )}
 
       {(loadingFiles || loadingAnnotator) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col items-center gap-3 rounded-xl bg-white px-8 py-6 shadow-lg">
-            <div className="h-8 w-8 animate-spin rounded-full border-3 border-blue-600 border-t-transparent" />
-            <p className="text-sm font-medium text-gray-700">
-              {loadingFiles ? "Cargando imágenes..." : "Abriendo editor..."}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay">
+          <div className="flex flex-col items-center gap-3 rounded-xl bg-bg-secondary px-8 py-6 shadow-lg">
+            <div className="h-8 w-8 animate-spin rounded-full border-3 border-accent border-t-transparent" />
+            <p className="text-sm font-medium text-text-secondary">
+              {loadingFiles ? t("ear.loadingImages") : t("ear.openingEditor")}
             </p>
           </div>
         </div>
@@ -217,10 +224,11 @@ export function EarPanel({ side, data, patientId, sessionId, onChange, onMoveIma
           annotations={annotatingImage.annotations}
           rotation={annotatingImage.rotation}
           crop={annotatingImage.crop}
-          onSave={(annotations, rotation, crop) => {
+          background={annotatingImage.background}
+          onSave={(annotations, rotation, crop, background) => {
             const updated = data.images.map((img) =>
               img.id === annotatingImage.id
-                ? { ...img, annotations, rotation, crop }
+                ? { ...img, annotations, rotation, crop, background }
                 : img
             );
             onChange({ ...data, images: updated });

@@ -1,26 +1,9 @@
-use crate::commands::workspace;
+use crate::commands::workspace::{self, FindingsCategoryConfig};
 use crate::storage::{file_manager, json_store};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EarFindings {
-    pub normal: bool,
-    pub retraction: bool,
-    pub perforation: bool,
-    pub effusion: bool,
-    pub tympanosclerosis: bool,
-    pub cholesteatoma: bool,
-    pub inflammation: bool,
-    pub cerumen: bool,
-    pub foreign_body: bool,
-    pub tube: bool,
-    pub myringitis: bool,
-    pub neomembrane: bool,
-    pub cae_normal: bool,
-    pub cae_edema: bool,
-    pub cae_exostosis: bool,
-    pub cae_otorrhea: bool,
-}
+pub type EarFindings = HashMap<String, bool>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QuadrantMark {
@@ -93,6 +76,10 @@ fn default_status() -> String {
     "in_progress".to_string()
 }
 
+fn default_report_type() -> String {
+    "otoscopy".to_string()
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
     pub id: String,
@@ -101,13 +88,21 @@ pub struct Report {
     pub session_id: String,
     #[serde(default = "default_status")]
     pub status: String,
+    #[serde(default = "default_report_type")]
+    pub report_type: String,
     pub examiner: String,
     pub equipment: String,
     pub right_ear: EarData,
     pub left_ear: EarData,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub post_right_ear: Option<EarData>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub post_left_ear: Option<EarData>,
     pub conclusion: String,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(default)]
+    pub findings_categories: Vec<FindingsCategoryConfig>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -117,6 +112,8 @@ pub struct SessionInfo {
     pub patient_name: String,
     pub created_at: String,
     pub status: String,
+    #[serde(default = "default_report_type")]
+    pub report_type: String,
 }
 
 fn session_path(
@@ -138,11 +135,21 @@ pub fn create_session(
     app: tauri::AppHandle,
     patient_id: String,
     session_id: String,
+    report_type: Option<String>,
 ) -> Result<(), String> {
     let path = session_path(&app, &patient_id, &session_id)?;
     file_manager::ensure_dir(&path)?;
-    file_manager::ensure_dir(&path.join("right"))?;
-    file_manager::ensure_dir(&path.join("left"))?;
+
+    let rt = report_type.unwrap_or_else(|| "otoscopy".to_string());
+    if rt == "ear_wash" {
+        file_manager::ensure_dir(&path.join("pre_right"))?;
+        file_manager::ensure_dir(&path.join("pre_left"))?;
+        file_manager::ensure_dir(&path.join("post_right"))?;
+        file_manager::ensure_dir(&path.join("post_left"))?;
+    } else {
+        file_manager::ensure_dir(&path.join("right"))?;
+        file_manager::ensure_dir(&path.join("left"))?;
+    }
     Ok(())
 }
 
@@ -192,12 +199,12 @@ pub fn list_sessions(app: tauri::AppHandle) -> Result<Vec<SessionInfo>, String> 
         let session_ids = file_manager::list_dirs(&sessions_dir)?;
         for sid in session_ids {
             let report_path = sessions_dir.join(&sid).join("report.json");
-            let (created_at, status) = if report_path.exists() {
+            let (created_at, status, report_type) = if report_path.exists() {
                 json_store::read_json::<Report>(&report_path)
-                    .map(|r| (r.created_at, r.status))
-                    .unwrap_or_else(|_| (sid.clone(), default_status()))
+                    .map(|r| (r.created_at, r.status, r.report_type))
+                    .unwrap_or_else(|_| (sid.clone(), default_status(), default_report_type()))
             } else {
-                (sid.clone(), default_status())
+                (sid.clone(), default_status(), default_report_type())
             };
 
             sessions.push(SessionInfo {
@@ -206,6 +213,7 @@ pub fn list_sessions(app: tauri::AppHandle) -> Result<Vec<SessionInfo>, String> 
                 patient_name: patient_name.clone(),
                 created_at,
                 status,
+                report_type,
             });
         }
     }
@@ -243,12 +251,12 @@ pub fn list_patient_sessions(
 
     for sid in session_ids {
         let report_path = sessions_dir.join(&sid).join("report.json");
-        let (created_at, status) = if report_path.exists() {
+        let (created_at, status, report_type) = if report_path.exists() {
             json_store::read_json::<Report>(&report_path)
-                .map(|r| (r.created_at, r.status))
-                .unwrap_or_else(|_| (sid.clone(), default_status()))
+                .map(|r| (r.created_at, r.status, r.report_type))
+                .unwrap_or_else(|_| (sid.clone(), default_status(), default_report_type()))
         } else {
-            (sid.clone(), default_status())
+            (sid.clone(), default_status(), default_report_type())
         };
 
         sessions.push(SessionInfo {
@@ -257,6 +265,7 @@ pub fn list_patient_sessions(
             patient_name: patient_name.clone(),
             created_at,
             status,
+            report_type,
         });
     }
 
@@ -307,6 +316,52 @@ pub fn duplicate_session(
     }
 
     Ok(new_id)
+}
+
+#[tauri::command]
+pub fn import_session_ears(
+    app: tauri::AppHandle,
+    source_patient_id: String,
+    source_session_id: String,
+    target_patient_id: String,
+    target_session_id: String,
+    target_right_dir: String,
+    target_left_dir: String,
+) -> Result<(), String> {
+    let src = session_path(&app, &source_patient_id, &source_session_id)?;
+    let dest = session_path(&app, &target_patient_id, &target_session_id)?;
+
+    // Determine source directories - otoscopy uses right/left, ear_wash uses pre_right/pre_left
+    let src_right = if src.join("right").exists() {
+        src.join("right")
+    } else if src.join("pre_right").exists() {
+        src.join("pre_right")
+    } else {
+        return Err("Directorio de oído derecho no encontrado en sesión origen".to_string());
+    };
+    let src_left = if src.join("left").exists() {
+        src.join("left")
+    } else if src.join("pre_left").exists() {
+        src.join("pre_left")
+    } else {
+        return Err("Directorio de oído izquierdo no encontrado en sesión origen".to_string());
+    };
+
+    let dest_right = dest.join(&target_right_dir);
+    let dest_left = dest.join(&target_left_dir);
+
+    // Clean target directories and copy
+    if dest_right.exists() {
+        file_manager::remove_dir_all(&dest_right)?;
+    }
+    copy_dir_recursive(&src_right, &dest_right)?;
+
+    if dest_left.exists() {
+        file_manager::remove_dir_all(&dest_left)?;
+    }
+    copy_dir_recursive(&src_left, &dest_left)?;
+
+    Ok(())
 }
 
 fn chrono_now() -> String {

@@ -41,7 +41,7 @@ export function PhotoGallery({
         const hasEdits = img.rotation !== 0 || img.annotations.length > 0 || !!img.crop;
 
         if (hasEdits) {
-          const processed = await compositeAnnotations(rawUrl, img.annotations, img.rotation, null, img.crop);
+          const processed = await compositeAnnotations(rawUrl, img.annotations, img.rotation, null, img.crop, img.background);
           cacheKeysRef.current[img.id] = key;
           setThumbnails((prev) => ({ ...prev, [img.id]: processed }));
         } else {
@@ -62,17 +62,17 @@ export function PhotoGallery({
         <div
           key={img.id}
           className={cn(
-            "overflow-hidden rounded-lg border-2 bg-white",
+            "overflow-hidden rounded-lg border-2 bg-bg-secondary",
             img.primary && img.selected
               ? "border-amber-400"
               : img.selected
-                ? "border-blue-500"
-                : "border-gray-200"
+                ? "border-accent"
+                : "border-border-secondary"
           )}
         >
           {/* Thumbnail — click to open annotator */}
           <div
-            className="relative aspect-[4/3] cursor-pointer bg-gray-100"
+            className="relative aspect-[4/3] cursor-pointer bg-bg-tertiary"
             onClick={() => onAnnotate ? onAnnotate(img) : onPreview(img)}
           >
             {thumbnails[img.id] ? (
@@ -83,7 +83,7 @@ export function PhotoGallery({
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent border-t-transparent" />
               </div>
             )}
 
@@ -94,8 +94,8 @@ export function PhotoGallery({
               </div>
             )}
             {img.selected && !img.primary && (
-              <div className="absolute left-1.5 top-1.5 rounded-full bg-blue-500 p-0.5 shadow-sm">
-                <Check size={10} className="text-white" />
+              <div className="absolute left-1.5 top-1.5 rounded-full bg-accent p-0.5 shadow-sm">
+                <Check size={10} className="text-text-inverted" />
               </div>
             )}
             {img.annotations.length > 0 && (
@@ -112,14 +112,14 @@ export function PhotoGallery({
           </div>
 
           {/* Action bar — always visible */}
-          <div className="flex items-center border-t border-gray-100 px-1 py-1">
+          <div className="flex items-center border-t border-border-secondary px-1 py-1">
             <button
               onClick={() => onSetPrimary(img.id)}
               className={cn(
                 "rounded p-1 transition-colors",
                 img.primary
                   ? "bg-amber-100 text-amber-600"
-                  : "text-gray-400 hover:bg-gray-100 hover:text-amber-500"
+                  : "text-text-tertiary hover:bg-bg-tertiary hover:text-amber-500"
               )}
               title="Imagen principal"
             >
@@ -130,8 +130,8 @@ export function PhotoGallery({
               className={cn(
                 "rounded p-1 transition-colors",
                 img.selected
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-400 hover:bg-gray-100 hover:text-blue-500"
+                  ? "bg-accent-subtle text-accent-text"
+                  : "text-text-tertiary hover:bg-bg-tertiary hover:text-accent"
               )}
               title={img.selected ? "Deseleccionar" : "Seleccionar"}
             >
@@ -140,7 +140,7 @@ export function PhotoGallery({
             {onClearAnnotations && img.annotations.length > 0 && (
               <button
                 onClick={() => onClearAnnotations(img.id)}
-                className="rounded p-1 text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-500"
+                className="rounded p-1 text-text-tertiary transition-colors hover:bg-warning-subtle hover:text-warning-text"
                 title="Borrar todas las anotaciones"
               >
                 <EraserIcon size={14} />
@@ -149,7 +149,7 @@ export function PhotoGallery({
             {onMoveToOtherEar && (
               <button
                 onClick={() => onMoveToOtherEar(img)}
-                className="rounded p-1 text-gray-400 transition-colors hover:bg-purple-50 hover:text-purple-500"
+                className="rounded p-1 text-text-tertiary transition-colors hover:bg-accent-subtle hover:text-accent-text"
                 title="Mover al otro oído"
               >
                 <ArrowRightLeft size={14} />
@@ -158,7 +158,7 @@ export function PhotoGallery({
             <div className="flex-1" />
             <button
               onClick={() => onRemove(img.id)}
-              className="rounded p-1 text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500"
+              className="rounded p-1 text-text-tertiary transition-colors hover:bg-danger-subtle hover:text-danger-text"
               title="Eliminar"
             >
               <Trash2 size={14} />

@@ -8,6 +8,7 @@ interface PhotoPreviewProps {
   loadImage: () => Promise<string>;
   rotation: number;
   crop?: CropData | null;
+  background?: "black" | "white" | "transparent";
   onClose: () => void;
   onAnnotate?: () => void;
 }
@@ -16,6 +17,7 @@ export function PhotoPreview({
   loadImage,
   rotation,
   crop,
+  background,
   onClose,
 }: PhotoPreviewProps) {
   const [url, setUrl] = useState("");
@@ -25,7 +27,7 @@ export function PhotoPreview({
     loadImage().then(async (rawUrl) => {
       if (cancelled) return;
       if (crop || rotation !== 0) {
-        const processed = await compositeAnnotations(rawUrl, [], rotation, null, crop);
+        const processed = await compositeAnnotations(rawUrl, [], rotation, null, crop, background);
         if (!cancelled) setUrl(processed);
       } else {
         if (!cancelled) setUrl(rawUrl);

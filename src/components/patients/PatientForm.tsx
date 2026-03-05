@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
@@ -37,17 +38,6 @@ function isValidDate(display: string): boolean {
   return !isNaN(d.getTime()) && d.toISOString().startsWith(iso);
 }
 
-const schema = z.object({
-  name: z.string().min(2, "Nombre requerido"),
-  rut: z.string().refine((v) => validateRut(v), "RUT inválido"),
-  birth_date: z.string().min(1, "Fecha requerida"),
-  phone: z.string().optional(),
-  email: z.string().email("Email inválido").or(z.literal("")).optional(),
-  notes: z.string().optional(),
-});
-
-type FormData = z.infer<typeof schema>;
-
 interface PatientFormProps {
   patient?: Patient;
   onSave: (patient: Patient) => Promise<void>;
@@ -55,6 +45,19 @@ interface PatientFormProps {
 }
 
 export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
+  const { t } = useTranslation();
+
+  const schema = z.object({
+    name: z.string().min(2, t("patients.form.nameRequired")),
+    rut: z.string().refine((v) => validateRut(v), t("patients.form.rutInvalid")),
+    birth_date: z.string().min(1, t("patients.form.birthDateRequired")),
+    phone: z.string().optional(),
+    email: z.string().email(t("patients.form.emailInvalid")).or(z.literal("")).optional(),
+    notes: z.string().optional(),
+  });
+
+  type FormData = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -98,13 +101,13 @@ export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
-        label="Nombre completo"
+        label={t("patients.form.nameLabel")}
         id="name"
         {...register("name")}
         error={errors.name?.message}
       />
       <Input
-        label="RUT"
+        label={t("patients.rut")}
         id="rut"
         {...register("rut")}
         error={errors.rut?.message}
@@ -113,11 +116,11 @@ export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
       />
       <div className="space-y-1">
         <div className="flex items-baseline gap-2">
-          <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700">
-            Fecha de nacimiento
+          <label htmlFor="birth_date" className="block text-sm font-medium text-text-secondary">
+            {t("patients.birthDate")}
           </label>
           {age !== null && age >= 0 && (
-            <span className="text-xs text-gray-500">({age} años)</span>
+            <span className="text-xs text-text-tertiary">({age} {t("patients.ageYears")})</span>
           )}
         </div>
         <input
@@ -129,24 +132,24 @@ export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
             const iso = displayToIso(formatted);
             setValue("birth_date", iso || formatted, { shouldValidate: true });
           }}
-          className={`w-full rounded-lg border px-3 py-2 text-sm transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-1 ${
+          className={`w-full rounded-lg border px-3 py-2 text-sm text-text-primary bg-bg-secondary transition-colors placeholder:text-text-tertiary focus:outline-none focus:ring-1 ${
             errors.birth_date
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+              ? "border-danger focus:border-danger focus:ring-danger"
+              : "border-border-primary focus:border-accent focus:ring-accent"
           }`}
         />
         {errors.birth_date && (
-          <p className="text-xs text-red-600">{errors.birth_date.message}</p>
+          <p className="text-xs text-danger-text">{errors.birth_date.message}</p>
         )}
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="Teléfono"
+          label={t("patients.phone")}
           id="phone"
           {...register("phone")}
         />
         <Input
-          label="Email"
+          label={t("patients.email")}
           id="email"
           type="email"
           {...register("email")}
@@ -154,22 +157,22 @@ export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
         />
       </div>
       <div className="space-y-1">
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-          Notas
+        <label htmlFor="notes" className="block text-sm font-medium text-text-secondary">
+          {t("patients.notes")}
         </label>
         <textarea
           id="notes"
           {...register("notes")}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-lg border border-border-primary bg-bg-secondary px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancelar
+          {t("common.cancel")}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
-          {patient ? "Actualizar" : "Crear"} Paciente
+          {patient ? t("patients.form.update") : t("patients.form.create")}
         </Button>
       </div>
     </form>

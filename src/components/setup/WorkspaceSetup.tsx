@@ -1,24 +1,75 @@
-import { FolderOpen } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FolderOpen, ArrowRight } from "lucide-react";
 import { useWorkspace } from "@/hooks/useWorkspace";
 
 export function WorkspaceSetup() {
+  const { t } = useTranslation();
   const { selectWorkspace } = useWorkspace();
+  const [step, setStep] = useState<"folder" | "name">("folder");
+  const [userName, setUserName] = useState("");
+
+  async function handleSelectFolder() {
+    setStep("name");
+  }
+
+  async function handleContinue() {
+    if (!userName.trim()) return;
+    await selectWorkspace(userName.trim());
+  }
+
+  if (step === "name") {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center bg-bg-primary">
+        <div className="w-full max-w-md rounded-xl bg-bg-secondary p-8 shadow-lg">
+          <h1 className="mb-2 text-center text-3xl font-bold text-text-primary">
+            OtoReport
+          </h1>
+          <p className="mb-6 text-center text-text-tertiary">
+            {t("setup.whatIsYourName")}
+          </p>
+          <div className="mb-2">
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleContinue()}
+              placeholder={t("setup.namePlaceholder")}
+              autoFocus
+              className="w-full rounded-lg border border-border-secondary bg-bg-primary px-4 py-3 text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+            />
+            <p className="mt-2 text-xs text-text-tertiary">
+              {t("setup.nameHelp")}
+            </p>
+          </div>
+          <button
+            onClick={handleContinue}
+            disabled={!userName.trim()}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 font-medium text-text-inverted transition-colors hover:bg-accent-hover disabled:opacity-50"
+          >
+            <ArrowRight size={20} />
+            {t("setup.selectFolderAction")}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
-        <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
+    <div className="flex h-screen flex-col items-center justify-center bg-bg-primary">
+      <div className="w-full max-w-md rounded-xl bg-bg-secondary p-8 shadow-lg">
+        <h1 className="mb-2 text-center text-3xl font-bold text-text-primary">
           OtoReport
         </h1>
-        <p className="mb-8 text-center text-gray-500">
-          Selecciona una carpeta de trabajo para almacenar tus informes
+        <p className="mb-8 text-center text-text-tertiary">
+          {t("setup.selectFolder")}
         </p>
         <button
-          onClick={selectWorkspace}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+          onClick={handleSelectFolder}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 font-medium text-text-inverted transition-colors hover:bg-accent-hover"
         >
           <FolderOpen size={20} />
-          Seleccionar carpeta de trabajo
+          {t("setup.start")}
         </button>
       </div>
     </div>

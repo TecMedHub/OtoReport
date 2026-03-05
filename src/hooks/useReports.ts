@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { v4 as uuidv4 } from "uuid";
-import type { Report, EarData, SessionInfo, Patient } from "@/types";
+import type { Report, EarData, SessionInfo, Patient, FindingsCategoryConfig, ReportType } from "@/types";
 import { DEFAULT_EAR_FINDINGS } from "@/types/findings";
+import { DEFAULT_FINDINGS_CATEGORIES } from "@/types/report";
 import { useWorkspace } from "./useWorkspace";
 
 function createEmptyEarData(): EarData {
@@ -18,15 +19,21 @@ export function createEmptyReport(
   patient: Patient,
   sessionId: string,
   examiner: string,
-  equipment: string
+  equipment: string,
+  findingsCategories?: FindingsCategoryConfig[],
+  reportType: ReportType = "otoscopy"
 ): Report {
   const now = new Date().toISOString();
-  return {
+  const cats = findingsCategories && findingsCategories.length > 0
+    ? findingsCategories
+    : DEFAULT_FINDINGS_CATEGORIES;
+  const report: Report = {
     id: uuidv4(),
     patient_id: patient.id,
     patient,
     session_id: sessionId,
     status: "in_progress" as const,
+    report_type: reportType,
     examiner,
     equipment,
     right_ear: createEmptyEarData(),
@@ -34,7 +41,13 @@ export function createEmptyReport(
     conclusion: "",
     created_at: now,
     updated_at: now,
+    findings_categories: cats.map((c) => ({ ...c, checks: c.checks.map((ch) => ({ ...ch })) })),
   };
+  if (reportType === "ear_wash") {
+    report.post_right_ear = createEmptyEarData();
+    report.post_left_ear = createEmptyEarData();
+  }
+  return report;
 }
 
 export function useReports() {
@@ -45,17 +58,20 @@ export function useReports() {
   const pendingReport = useRef<Report | null>(null);
 
   const createSession = useCallback(
-    async (patient: Patient) => {
+    async (patient: Patient, reportType: ReportType = "otoscopy") => {
       const sessionId = uuidv4();
       await invoke("create_session", {
         patientId: patient.id,
         sessionId,
+        reportType,
       });
       const r = createEmptyReport(
         patient,
         sessionId,
         config?.examiner ?? "",
-        config?.equipment ?? ""
+        config?.equipment ?? "",
+        config?.findings_categories,
+        reportType
       );
       await invoke("save_report", { report: r });
       setReport(r);

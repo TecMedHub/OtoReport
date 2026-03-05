@@ -6,6 +6,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_opener::init())
         .setup(|_app| {
             #[cfg(target_os = "linux")]
             {
@@ -30,6 +31,13 @@ pub fn run() {
             commands::workspace::get_workspace_config,
             commands::workspace::save_workspace_config,
             commands::workspace::load_logo,
+            commands::workspace::get_platform,
+            commands::workspace::auto_setup_workspace,
+            commands::workspace::save_logo,
+            commands::workspace::get_profiles,
+            commands::workspace::save_profiles,
+            commands::workspace::set_active_profile,
+            commands::workspace::get_active_profile_id,
             commands::patients::list_patients,
             commands::patients::save_patient,
             commands::patients::get_patient,
@@ -42,6 +50,7 @@ pub fn run() {
             commands::reports::list_patient_sessions,
             commands::reports::delete_session,
             commands::reports::duplicate_session,
+            commands::reports::import_session_ears,
             commands::images::save_image,
             commands::images::load_image,
             commands::images::delete_image,
@@ -49,6 +58,8 @@ pub fn run() {
             commands::images::move_image,
             commands::images::save_annotated,
             commands::export::save_pdf,
+            commands::export::save_pdf_to_cache,
+            commands::contribute::create_contribution_zip,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

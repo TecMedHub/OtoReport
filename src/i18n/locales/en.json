@@ -1,0 +1,358 @@
+{
+  "profileSelector": {
+    "title": "Who is using OtoReport?",
+    "add": "Add",
+    "manage": "Manage profiles",
+    "newProfile": "New profile",
+    "editProfile": "Edit profile",
+    "name": "Name",
+    "color": "Color",
+    "create": "Create profile",
+    "done": "Done"
+  },
+  "setup": {
+    "welcome": "Welcome to OtoReport",
+    "selectFolder": "Select a workspace folder to store your reports",
+    "start": "Start",
+    "whatIsYourName": "What is your name?",
+    "namePlaceholder": "TM ORL; DR.; FGLO; Jaime Garcia",
+    "nameHelp": "This name will appear in your reports as the examiner",
+    "selectFolderAction": "Select workspace folder"
+  },
+  "history": {
+    "title": "History",
+    "noSessions": "No sessions registered",
+    "wash": "Wash",
+    "completed": "Completed",
+    "inProgress": "In progress"
+  },
+  "ear": {
+    "right": "Right Ear (OD)",
+    "left": "Left Ear (OS)",
+    "findingToMark": "Finding to mark:",
+    "observations": "Observations",
+    "observationsPlaceholder": "Additional observations...",
+    "images": "Images",
+    "loadingImages": "Loading images...",
+    "openingEditor": "Opening editor...",
+    "imageFilterName": "Images"
+  },
+  "report": {
+    "title": "Report",
+    "new": "New Report",
+    "edit": "Edit Report",
+    "save": "Save Report",
+    "saving": "Saving...",
+    "preview": "PDF Preview",
+    "metadata": {
+      "patientDetails": "Show patient details",
+      "examiner": "Examiner",
+      "equipment": "Equipment",
+      "phone": "Tel",
+      "email": "Email",
+      "birthDate": "DOB"
+    },
+    "findings": {
+      "configure": "Configure findings",
+      "update": "Update findings",
+      "updateTitle": "Configure findings library",
+      "updateDescription": "Update findings checks to current workspace configuration"
+    },
+    "earWash": {
+      "pre": "Pre-Wash",
+      "post": "Post-Wash",
+      "import": "Import from previous otoscopy",
+      "importTitle": "Import to {{phase}}",
+      "importing": "Importing data...",
+      "noSessions": "No other sessions for this patient",
+      "selectSession": "Select a session to copy its ear data (findings, marks, observations and images):",
+      "types": {
+        "ear_wash": "Ear Wash",
+        "otoscopy": "Otoscopy"
+      },
+      "status": {
+        "completed": "Completed",
+        "in_progress": "In progress"
+      }
+    },
+    "conclusion": {
+      "label": "Conclusion",
+      "placeholder": "Exam conclusion..."
+    },
+    "patientExisting": "Existing patient — data autofilled",
+    "reportStarted": "Report started",
+    "patientCreatedAndReportStarted": "Patient created and report started",
+    "startReport": "Start Report",
+    "reportType": "Report Type",
+    "readOnly": "Read only"
+  },
+  "pdf": {
+    "sections": {
+      "header": "Header",
+      "logo": "Include logo",
+      "patient_info": "Patient Data",
+      "exam_info": "Exam Data",
+      "diagram": "Tympanic Diagram",
+      "findings": "Findings",
+      "observations": "Observations",
+      "images": "Images",
+      "annotations": "Image Annotations",
+      "conclusion": "Conclusion",
+      "footer": "Footer"
+    },
+    "labels": {
+      "patientData": "Patient Data",
+      "examData": "Exam Data",
+      "examiner": "Examiner",
+      "equipment": "Equipment",
+      "rightEar": "Right Ear (OD)",
+      "leftEar": "Left Ear (OS)",
+      "observations": "Observations",
+      "conclusion": "Conclusion",
+      "page": "Page {{current}} of {{total}}"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "general": "General",
+      "report": "Report",
+      "findings": "Findings",
+      "profiles": "Profiles",
+      "about": "About"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "themes": {
+        "dracula": "Dracula",
+        "alucard": "Alucard",
+        "light": "Light",
+        "dark": "Dark",
+        "wine": "Wine",
+        "wine-light": "Wine Light"
+      }
+    },
+    "workspace": {
+      "title": "Workspace Folder",
+      "notConfigured": "Not configured",
+      "change": "Change"
+    },
+    "center": {
+      "title": "Health Center & Examiner",
+      "name": "Center name",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "logo": "Center logo",
+      "changeLogo": "Change logo",
+      "selectLogo": "Select logo",
+      "examiner": "Examiner name",
+      "equipment": "Equipment used"
+    },
+    "reportPrefs": {
+      "title": "Report Preferences",
+      "otoscopyTitle": "Report Title (Otoscopy)",
+      "earWashTitle": "Report Title (Ear Wash)",
+      "sections": "Report sections",
+      "reset": "Reset",
+      "imageSize": "Image size",
+      "imagesPerRow": "Images per row",
+      "reportColor": "Report color",
+      "preview": "Preview",
+      "sizes": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
+    "findings": {
+      "title": "Findings Library",
+      "subtitle": "Add, remove and customize findings. Changes apply to new reports.",
+      "addCategory": "Category",
+      "reset": "Reset",
+      "categoryName": "Category name",
+      "findingCount": "{{count}} finding",
+      "findingCount_plural": "{{count}} findings",
+      "descriptionPlaceholder": "Brief description...",
+      "addFinding": "Add finding",
+      "newCategory": "New category",
+      "removeCategory": "Remove category",
+      "removeFinding": "Remove finding",
+      "calibrateSprites": "Calibrate sprites"
+    },
+    "profiles": {
+      "activeTitle": "Active profile",
+      "examinerSubtitle": "Examiner in reports",
+      "changeProfile": "Change profile",
+      "listTitle": "Profiles",
+      "addProfile": "Add profile",
+      "newProfile": "New profile",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "create": "Create",
+      "active": "Active",
+      "placeholder": "Examiner name"
+    },
+    "about": {
+      "title": "OtoReport",
+      "subtitle": "Otoscopic reporting software",
+      "version": "Version",
+      "projectTitle": "About the project",
+      "projectDescription": "OtoReport is a software developed at TecMedHub for clinical otoscopic report generation. It arises from the need for a standardized and efficient tool to document otoscopic findings.",
+      "aiTitle": "oIR — AI detection and classification",
+      "aiDescription": "We are working on oIR, an artificial intelligence system for advanced detection and classification of otoscopic findings.",
+      "collabInvitation": "Everyone is welcome to collaborate on this project.",
+      "teamTitle": "Development Team",
+      "teamLeader": "Project Leader",
+      "mandator": "Client",
+      "teamWork": "Working Team",
+      "reviewers": "Reviewers",
+      "findingsLibraryTitle": "Otoscopic Findings Library",
+      "findingsLibraryDescription": "The OtoReport findings library is an open, collaborative repository that gathers standardized descriptions of otoscopic findings for clinical and educational use.",
+      "findingsLibraryContribute": "We invite hearing health professionals to contribute new findings, corrections, or improvements. To collaborate, it is essential to follow the established ethical guidelines:",
+      "findingsLibraryEthics1": "Descriptions must be based on clinical evidence and up-to-date scientific literature.",
+      "findingsLibraryEthics2": "Do not include personal patient data or information that could identify them.",
+      "findingsLibraryEthics3": "Contributed images must have informed consent and be anonymized.",
+      "findingsLibraryEthics4": "Content must be respectful, objective, and oriented toward clinical-educational benefit.",
+      "findingsLibraryEthics5": "Respect authorship and cite sources when applicable.",
+      "findingsLibraryContact": "If you want to collaborate or have questions, reach out to us on Instagram:",
+      "equipmentTitle": "Recommended Video Otoscopes",
+      "equipmentDescription": "Community-tested and recommended equipment for clinical use with OtoReport.",
+      "equipmentLoading": "Loading recommended equipment...",
+      "equipmentOffline": "Could not load equipment list",
+      "equipmentRetry": "Retry",
+      "equipmentShareExperience": "Do you use a video otoscope not listed here? Share your experience on Instagram:"
+    },
+    "save": "Save Settings",
+    "saved": "Saved"
+  },
+  "patients": {
+    "title": "Patients",
+    "name": "Name",
+    "rut": "ID/RUT",
+    "age": "Age",
+    "ageYears": "years",
+    "phone": "Phone",
+    "email": "Email",
+    "birthDate": "Birth Date",
+    "notes": "Notes",
+    "createdAt": "Created",
+    "updatedAt": "Updated",
+    "new": "New Patient",
+    "edit": "Edit Patient",
+    "newReport": "New Report",
+    "confirmDeleteTitle": "Confirm Deletion",
+    "confirmDeleteMessage": "Delete this patient and all their data? This action cannot be undone.",
+    "updated": "Patient updated",
+    "created": "Patient created",
+    "deleted": "Patient deleted",
+    "search": "Search patients...",
+    "noPatients": "No patients registered",
+    "addFirst": "Register the first patient",
+    "form": {
+      "nameLabel": "Full name",
+      "nameRequired": "Name required",
+      "rutInvalid": "Invalid ID/RUT",
+      "birthDateRequired": "Date required",
+      "emailInvalid": "Invalid email",
+      "update": "Update Patient",
+      "create": "Create Patient"
+    },
+    "detail": {
+      "back": "Back to patients",
+      "edit": "Edit patient",
+      "reports": "Reports",
+      "noReports": "No reports yet",
+      "createFirst": "Create first report",
+      "duplicateReport": "Duplicate report",
+      "deleteReport": "Delete report",
+      "confirmDeleteReport": "Delete this report and all its images? This action cannot be undone.",
+      "reportDeleted": "Report deleted",
+      "reportDuplicated": "Report duplicated",
+      "deleteError": "Error deleting",
+      "duplicateError": "Error duplicating",
+      "patientNotFound": "Patient not found"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "subtitle": "Clinical otoscopy reporting system",
+    "newReport": "New Report",
+    "patients": "Patients"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "newReport": "New Report",
+    "history": "History",
+    "findingsLibrary": "Findings Library",
+    "settings": "Settings"
+  },
+  "header": {
+    "changeProfile": "Change Profile",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close"
+  },
+  "findings": {
+    "labels": {
+      "retraction": "Retraction",
+      "perforation": "Perforation",
+      "effusion": "Effusion",
+      "tympanosclerosis": "Tympanosclerosis",
+      "cholesteatoma": "Cholesteatoma",
+      "inflammation": "Inflammation",
+      "tube": "Tube",
+      "myringitis": "Myringitis"
+    }
+  },
+  "findingsLibrary": {
+    "title": "Findings Library",
+    "subtitle": "Visual reference of otoscopic findings with clinical images",
+    "membrane": "Tympanic Membrane",
+    "cae": "External Auditory Canal",
+    "all": "All",
+    "search": "Search finding...",
+    "noResults": "No findings found",
+    "noImages": "No image available",
+    "loadingImages": "Loading images...",
+    "imageError": "Error loading image",
+    "totalFindings": "{{count}} findings",
+    "offline": "Could not connect to the image repository",
+    "offlineHint": "Check your internet connection. Images are downloaded from GitHub.",
+    "retry": "Retry",
+    "collaborate": "Want to contribute clinical images? Select a finding or visit Settings.",
+    "collaborateLink": "Go to Settings",
+    "contribute": "Contribute",
+    "contributedBy": "Image contributed by"
+  },
+  "contribute": {
+    "title": "Contribute image",
+    "back": "Back to Library",
+    "contributorName": "Contributor name",
+    "namePlaceholder": "Dr. John Doe",
+    "image": "Clinical image",
+    "selectImage": "Select image",
+    "changeImage": "Change image",
+    "annotate": "Annotate image",
+    "annotationCount": "{{count}} annotations applied",
+    "generate": "Generate contribution package",
+    "generating": "Generating...",
+    "success": "Package generated successfully. Send it to TecMedHub for review.",
+    "instructions": "A .zip file will be generated with the image, annotations and metadata. Send it to the TecMedHub team via Instagram or GitHub to include it in the library."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "search": "Search",
+    "noResults": "No results found",
+    "noFindings": "No findings"
+  }
+}

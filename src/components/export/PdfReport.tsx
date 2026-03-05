@@ -6,8 +6,10 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import type { Report, EarData, WorkspaceConfig } from "@/types";
-import type { EarFindings } from "@/types/findings";
+import type { Report, EarData, WorkspaceConfig, FindingsCategoryConfig } from "@/types";
+import type { EarFindings, QuadrantMark } from "@/types/findings";
+import { FindingType, DEFAULT_FINDINGS_CATEGORIES } from "@/types";
+import i18n from "@/i18n/config";
 
 const DEFAULT_SECTION_ORDER = ["header", "logo", "patient_info", "exam_info", "diagram", "findings", "observations", "images", "annotations", "conclusion", "footer"];
 
@@ -141,42 +143,70 @@ const styles = StyleSheet.create({
   },
 });
 
-const findingLabels: Record<keyof EarFindings, string> = {
-  normal: "Normal",
-  retraction: "Retracción",
-  perforation: "Perforación",
-  effusion: "Efusión",
-  tympanosclerosis: "Timpanoesclerosis",
-  cholesteatoma: "Colesteatoma",
-  inflammation: "Inflamación",
-  cerumen: "Cerumen",
-  foreign_body: "Cuerpo extraño",
-  tube: "Tubo de ventilación",
-  myringitis: "Miringitis",
-  neomembrane: "Neomembrana",
-  cae_normal: "CAE Normal",
-  cae_edema: "CAE Edema",
-  cae_exostosis: "CAE Exostosis",
-  cae_otorrhea: "CAE Otorrea",
-};
+function buildFindingLabels(categories?: FindingsCategoryConfig[]): Record<string, string> {
+  const cats = categories && categories.length > 0 ? categories : DEFAULT_FINDINGS_CATEGORIES;
+  const labels: Record<string, string> = {};
+  for (const cat of cats) {
+    const prefix = cat.id === "cae" ? "CAE " : "";
+    for (const check of cat.checks) {
+      labels[check.key] = prefix + check.label;
+    }
+  }
+  return labels;
+}
 
-function ActiveFindings({ findings }: { findings: EarFindings }) {
-  const active = (Object.keys(findings) as (keyof EarFindings)[]).filter(
-    (k) => findings[k]
-  );
+function ActiveFindings({ findings, categories }: { findings: EarFindings; categories?: FindingsCategoryConfig[] }) {
+  const labels = buildFindingLabels(categories);
+  const active = Object.keys(findings).filter((k) => findings[k]);
 
-  if (active.length === 0) return <Text style={styles.findingItem}>Sin hallazgos</Text>;
+  if (active.length === 0) return <Text style={styles.findingItem}>{i18n.t("common.noFindings", "Sin hallazgos")}</Text>;
 
   return (
     <>
       {active.map((k) => (
         <Text key={k} style={styles.findingItem}>
-          • {findingLabels[k]}
+          • {labels[k] || k}
         </Text>
       ))}
     </>
   );
 }
+
+const diagramSymbols: Record<string, string> = {
+  [FindingType.Retraction]: "///",
+  [FindingType.Perforation]: "ooo",
+  [FindingType.Effusion]: "~~~",
+  [FindingType.Tympanoslerosis]: "...",
+  [FindingType.Cholesteatoma]: "###",
+  [FindingType.Inflammation]: "xxx",
+  [FindingType.Tube]: "+++",
+  [FindingType.Myringitis]: "***",
+};
+
+function getDiagramLabels(): Record<string, string> {
+  return {
+    [FindingType.Retraction]: i18n.t("findings.labels.retraction", "Retracción"),
+    [FindingType.Perforation]: i18n.t("findings.labels.perforation", "Perforación"),
+    [FindingType.Effusion]: i18n.t("findings.labels.effusion", "Efusión"),
+    [FindingType.Tympanoslerosis]: i18n.t("findings.labels.tympanosclerosis", "Timpanoesclerosis"),
+    [FindingType.Cholesteatoma]: i18n.t("findings.labels.cholesteatoma", "Colesteatoma"),
+    [FindingType.Inflammation]: i18n.t("findings.labels.inflammation", "Inflamación"),
+    [FindingType.Tube]: i18n.t("findings.labels.tube", "Tubo"),
+    [FindingType.Myringitis]: i18n.t("findings.labels.myringitis", "Miringitis"),
+  };
+}
+
+const diagramColors: Record<string, string> = {
+  [FindingType.Retraction]: "#f59e0b",
+  [FindingType.Perforation]: "#ef4444",
+  [FindingType.Effusion]: "#3b82f6",
+  [FindingType.Tympanoslerosis]: "#8b5cf6",
+  [FindingType.Cholesteatoma]: "#f97316",
+  [FindingType.Inflammation]: "#dc2626",
+  [FindingType.Tube]: "#10b981",
+  [FindingType.Myringitis]: "#ec4899",
+};
+
 
 function EarSection({
   title,
@@ -187,6 +217,7 @@ function EarSection({
   diagramUrl,
   config,
   contentOrder,
+  reportCategories,
 }: {
   title: string;
   side: "right" | "left";
@@ -196,9 +227,11 @@ function EarSection({
   diagramUrl?: string;
   config: WorkspaceConfig;
   contentOrder: string[];
+  reportCategories?: FindingsCategoryConfig[];
 }) {
   const secSize = IMAGE_SIZES[config.image_size] || IMAGE_SIZES.medium;
   const earColor = EAR_COLORS[side];
+  const diagLabels = getDiagramLabels();
 
   return (
     <View style={styles.earColumn}>
@@ -209,20 +242,30 @@ function EarSection({
         switch (key) {
           case "diagram":
             return config.show_diagram && diagramUrl ? (
-              <Image
-                key={key}
-                src={diagramUrl}
-                style={{ width: 100, height: 100, marginBottom: 6 }}
-              />
+              <View key={key} style={{ marginBottom: 6 }}>
+                <Image
+                  src={diagramUrl}
+                  style={{ width: 100, height: 100 }}
+                />
+                {data.marks.marks.length > 0 && (
+                  <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4, marginTop: 3 }}>
+                    {[...new Set(data.marks.marks.map((m: QuadrantMark) => m.finding))].map((f) => (
+                      <Text key={f} style={{ fontSize: 6, color: diagramColors[f] || "#888" }}>
+                        {diagramSymbols[f] || "?"} {diagLabels[f] || f}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </View>
             ) : null;
           case "findings":
             return config.show_findings ? (
-              <View key={key}><ActiveFindings findings={data.findings} /></View>
+              <View key={key}><ActiveFindings findings={data.findings} categories={reportCategories} /></View>
             ) : null;
           case "observations":
             return config.show_observations && data.observations ? (
               <Text key={key} style={[styles.findingItem, { marginTop: 4 }]}>
-                Obs: {data.observations}
+                {i18n.t("pdf.labels.observations")}: {data.observations}
               </Text>
             ) : null;
           case "images":
@@ -273,6 +316,12 @@ interface PdfReportProps {
   leftEarSecondary: string[];
   rightDiagramUrl?: string;
   leftDiagramUrl?: string;
+  postRightEarPrimary?: string | null;
+  postRightEarSecondary?: string[];
+  postLeftEarPrimary?: string | null;
+  postLeftEarSecondary?: string[];
+  postRightDiagramUrl?: string;
+  postLeftDiagramUrl?: string;
   config: WorkspaceConfig;
   logoUrl: string | null;
 }
@@ -285,15 +334,26 @@ export function PdfReport({
   leftEarSecondary,
   rightDiagramUrl,
   leftDiagramUrl,
+  postRightEarPrimary,
+  postRightEarSecondary,
+  postLeftEarPrimary,
+  postLeftEarSecondary,
+  postRightDiagramUrl,
+  postLeftDiagramUrl,
   config,
   logoUrl,
 }: PdfReportProps) {
+  const isEarWash = report.report_type === "ear_wash";
   const theme = getTheme(config.theme_color);
-  const date = new Date(report.created_at).toLocaleDateString("es-CL", {
+  const locale = i18n.language.startsWith("es") ? "es-CL" : "en-US";
+  const date = new Date(report.created_at).toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
+  const reportTitle = isEarWash
+    ? (config.ear_wash_report_title || i18n.t("report.earWash.types.ear_wash"))
+    : (config.report_title || i18n.t("report.earWash.types.otoscopy"));
 
   const showLogo = config.show_logo && logoUrl;
   const hasCenterInfo = config.center_name || config.center_address || config.center_phone || config.center_email;
@@ -315,7 +375,7 @@ export function PdfReport({
           )}
           <View style={styles.headerInfo}>
             <Text style={{ fontSize: 18, fontWeight: "bold", color: theme.dark, marginBottom: 4 }}>
-              {config.report_title || "Informe de Otoscopía"}
+              {reportTitle}
             </Text>
             {hasCenterInfo && (
               <>
@@ -340,19 +400,19 @@ export function PdfReport({
       config.show_patient_info ? (
         <View key="patient_info" style={styles.section}>
           <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
-            Datos del Paciente
+            {i18n.t("pdf.labels.patientData")}
           </Text>
           <View style={styles.row}>
-            <Text style={styles.label}>Nombre:</Text>
+            <Text style={styles.label}>{i18n.t("patients.name")}:</Text>
             <Text style={styles.value}>{report.patient.name}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>RUT:</Text>
+            <Text style={styles.label}>{i18n.t("patients.rut")}:</Text>
             <Text style={styles.value}>{report.patient.rut}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Edad:</Text>
-            <Text style={styles.value}>{report.patient.age} años</Text>
+            <Text style={styles.label}>{i18n.t("patients.age")}:</Text>
+            <Text style={styles.value}>{report.patient.age} {i18n.t("patients.ageYears")}</Text>
           </View>
         </View>
       ) : null,
@@ -360,53 +420,120 @@ export function PdfReport({
       config.show_exam_info ? (
         <View key="exam_info" style={styles.section}>
           <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
-            Datos del Examen
+            {i18n.t("pdf.labels.examData")}
           </Text>
           <View style={styles.row}>
-            <Text style={styles.label}>Examinador:</Text>
+            <Text style={styles.label}>{i18n.t("pdf.labels.examiner")}:</Text>
             <Text style={styles.value}>{report.examiner}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Equipo:</Text>
+            <Text style={styles.label}>{i18n.t("pdf.labels.equipment")}:</Text>
             <Text style={styles.value}>{report.equipment}</Text>
           </View>
         </View>
       ) : null,
     "__ear__": () =>
       hasEarContent ? (
-        <View key="ear_content" style={styles.section}>
-          <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
-            Hallazgos
-          </Text>
-          <View style={styles.earContainer}>
-            <EarSection
-              title="Oído Derecho (OD)"
-              side="right"
-              data={report.right_ear}
-              primaryImage={rightEarPrimary}
-              secondaryImages={rightEarSecondary}
-              diagramUrl={rightDiagramUrl}
-              config={config}
-              contentOrder={earContentOrder}
-            />
-            <EarSection
-              title="Oído Izquierdo (OI)"
-              side="left"
-              data={report.left_ear}
-              primaryImage={leftEarPrimary}
-              secondaryImages={leftEarSecondary}
-              diagramUrl={leftDiagramUrl}
-              config={config}
-              contentOrder={earContentOrder}
-            />
+        isEarWash && report.post_right_ear && report.post_left_ear ? (
+          <View key="ear_content">
+            {/* Pre-Lavado */}
+            <View style={styles.section}>
+              <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
+                {i18n.t("report.earWash.pre")}
+              </Text>
+              <View style={styles.earContainer}>
+                <EarSection
+                  title={i18n.t("pdf.labels.rightEar")}
+                  side="right"
+                  data={report.right_ear}
+                  primaryImage={rightEarPrimary}
+                  secondaryImages={rightEarSecondary}
+                  diagramUrl={rightDiagramUrl}
+                  config={config}
+                  contentOrder={earContentOrder}
+                  reportCategories={report.findings_categories}
+                />
+                <EarSection
+                  title={i18n.t("pdf.labels.leftEar")}
+                  side="left"
+                  data={report.left_ear}
+                  primaryImage={leftEarPrimary}
+                  secondaryImages={leftEarSecondary}
+                  diagramUrl={leftDiagramUrl}
+                  config={config}
+                  contentOrder={earContentOrder}
+                  reportCategories={report.findings_categories}
+                />
+              </View>
+            </View>
+            {/* Post-Lavado */}
+            <View style={styles.section}>
+              <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
+                {i18n.t("report.earWash.post")}
+              </Text>
+              <View style={styles.earContainer}>
+                <EarSection
+                  title={i18n.t("pdf.labels.rightEar")}
+                  side="right"
+                  data={report.post_right_ear}
+                  primaryImage={postRightEarPrimary ?? null}
+                  secondaryImages={postRightEarSecondary ?? []}
+                  diagramUrl={postRightDiagramUrl}
+                  config={config}
+                  contentOrder={earContentOrder}
+                  reportCategories={report.findings_categories}
+                />
+                <EarSection
+                  title={i18n.t("pdf.labels.leftEar")}
+                  side="left"
+                  data={report.post_left_ear}
+                  primaryImage={postLeftEarPrimary ?? null}
+                  secondaryImages={postLeftEarSecondary ?? []}
+                  diagramUrl={postLeftDiagramUrl}
+                  config={config}
+                  contentOrder={earContentOrder}
+                  reportCategories={report.findings_categories}
+                />
+              </View>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View key="ear_content" style={styles.section}>
+            <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
+              {i18n.t("pdf.sections.findings")}
+            </Text>
+            <View style={styles.earContainer}>
+              <EarSection
+                title={i18n.t("pdf.labels.rightEar")}
+                side="right"
+                data={report.right_ear}
+                primaryImage={rightEarPrimary}
+                secondaryImages={rightEarSecondary}
+                diagramUrl={rightDiagramUrl}
+                config={config}
+                contentOrder={earContentOrder}
+                reportCategories={report.findings_categories}
+              />
+              <EarSection
+                title={i18n.t("pdf.labels.leftEar")}
+                side="left"
+                data={report.left_ear}
+                primaryImage={leftEarPrimary}
+                secondaryImages={leftEarSecondary}
+                diagramUrl={leftDiagramUrl}
+                config={config}
+                contentOrder={earContentOrder}
+                reportCategories={report.findings_categories}
+              />
+            </View>
+          </View>
+        )
       ) : null,
     conclusion: () =>
       config.show_conclusion && report.conclusion ? (
         <View key="conclusion" style={styles.section}>
           <Text style={{ fontSize: 12, fontWeight: "bold", color: theme.dark, marginBottom: 6, borderBottom: "1px solid #e5e7eb", paddingBottom: 3 }}>
-            Conclusión
+            {i18n.t("pdf.labels.conclusion")}
           </Text>
           <View style={{ marginTop: 10, padding: 10, backgroundColor: "#f9fafb", borderRadius: 4, borderLeft: `3px solid ${theme.primary}` }}>
             <Text>{report.conclusion}</Text>
@@ -415,11 +542,11 @@ export function PdfReport({
       ) : null,
     footer: () =>
       config.show_footer ? (
-        <View key="footer" style={styles.footer} fixed>
+        <View style={styles.footer} fixed>
           <Text>OtoReport v1.0.0</Text>
           <Text
             render={({ pageNumber, totalPages }) =>
-              `Página ${pageNumber} de ${totalPages}`
+              i18n.t("pdf.labels.page", { current: pageNumber, total: totalPages })
             }
           />
         </View>

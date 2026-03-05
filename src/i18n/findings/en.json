@@ -1,0 +1,568 @@
+{
+  "categories": {
+    "membrane": "Tympanic Membrane",
+    "cae": "External Auditory Canal"
+  },
+  "findings": {
+    "normal": {
+      "label": "Normal",
+      "description": "Normal-appearing tympanic membrane, translucent, with light reflex present"
+    },
+    "retraction": {
+      "label": "Retraction",
+      "description": "Retraction of the tympanic membrane"
+    },
+    "retraction_grade_i": {
+      "label": "Retraction grade I",
+      "description": "Mild retraction without contact with middle ear structures"
+    },
+    "retraction_grade_ii": {
+      "label": "Retraction grade II",
+      "description": "Retraction contacting the incudostapedial joint"
+    },
+    "retraction_grade_iii": {
+      "label": "Retraction grade III",
+      "description": "Retraction contacting the promontory without bony erosion"
+    },
+    "retraction_grade_iv": {
+      "label": "Retraction grade IV",
+      "description": "Retraction adherent to the promontory with possible bony erosion"
+    },
+    "retraction_as": {
+      "label": "Anterosuperior retraction",
+      "description": "Retraction localized in the anterosuperior quadrant"
+    },
+    "retraction_ai": {
+      "label": "Anteroinferior retraction",
+      "description": "Retraction localized in the anteroinferior quadrant"
+    },
+    "retraction_ps": {
+      "label": "Posterosuperior retraction",
+      "description": "Retraction localized in the posterosuperior quadrant"
+    },
+    "retraction_pi": {
+      "label": "Posteroinferior retraction",
+      "description": "Retraction localized in the posteroinferior quadrant"
+    },
+    "retraction_pars_flaccida": {
+      "label": "Pars flaccida retraction",
+      "description": "Retraction of the pars flaccida (Prussak's space)"
+    },
+    "retraction_pars_tensa": {
+      "label": "Pars tensa retraction",
+      "description": "Diffuse retraction of the pars tensa"
+    },
+    "atelectasis": {
+      "label": "Atelectasis",
+      "description": "Generalized retraction of the entire tympanic membrane"
+    },
+    "perforation": {
+      "label": "Perforation",
+      "description": "Perforation of the tympanic membrane"
+    },
+    "perforation_central": {
+      "label": "Central perforation",
+      "description": "Perforation in the central portion of the pars tensa"
+    },
+    "perforation_marginal": {
+      "label": "Marginal perforation",
+      "description": "Perforation reaching the tympanic annulus"
+    },
+    "perforation_subtotal": {
+      "label": "Subtotal perforation",
+      "description": "Perforation involving most of the pars tensa"
+    },
+    "perforation_total": {
+      "label": "Total perforation",
+      "description": "Complete absence of the tympanic membrane"
+    },
+    "perforation_anterior": {
+      "label": "Anterior perforation",
+      "description": "Perforation located in the anterior half"
+    },
+    "perforation_posterior": {
+      "label": "Posterior perforation",
+      "description": "Perforation located in the posterior half"
+    },
+    "perforation_inferior": {
+      "label": "Inferior perforation",
+      "description": "Perforation located in the inferior portion"
+    },
+    "perforation_attic": {
+      "label": "Attic perforation",
+      "description": "Perforation localized in the pars flaccida or attic"
+    },
+    "perforation_kidney": {
+      "label": "Kidney-shaped perforation",
+      "description": "Kidney-shaped perforation"
+    },
+    "perforation_dry": {
+      "label": "Dry perforation",
+      "description": "Perforation without active discharge"
+    },
+    "perforation_wet": {
+      "label": "Wet perforation",
+      "description": "Perforation with active discharge or otorrhea"
+    },
+    "perforation_healed": {
+      "label": "Healed perforation",
+      "description": "Previously healed perforation (thin membrane)"
+    },
+    "effusion": {
+      "label": "Effusion",
+      "description": "Presence of fluid in the middle ear"
+    },
+    "effusion_serous": {
+      "label": "Serous effusion",
+      "description": "Clear and transparent fluid in the middle ear"
+    },
+    "effusion_mucoid": {
+      "label": "Mucoid effusion",
+      "description": "Thick and viscous fluid in the middle ear (glue ear)"
+    },
+    "effusion_purulent": {
+      "label": "Purulent effusion",
+      "description": "Purulent fluid in the middle ear visible behind the membrane"
+    },
+    "air_fluid_level": {
+      "label": "Air-fluid level",
+      "description": "Air-fluid level visible behind the tympanic membrane"
+    },
+    "air_bubbles": {
+      "label": "Air bubbles",
+      "description": "Air bubbles visible behind the tympanic membrane"
+    },
+    "hemotympanum": {
+      "label": "Hemotympanum",
+      "description": "Blood in the middle ear cavity"
+    },
+    "blue_ear": {
+      "label": "Blue ear",
+      "description": "Bluish discoloration of the membrane due to chronic hemotympanum"
+    },
+    "tympanosclerosis": {
+      "label": "Tympanosclerosis",
+      "description": "White calcific deposits on the tympanic membrane"
+    },
+    "tympanosclerosis_focal": {
+      "label": "Focal tympanosclerosis",
+      "description": "Localized calcific plaque in a specific area"
+    },
+    "tympanosclerosis_diffuse": {
+      "label": "Diffuse tympanosclerosis",
+      "description": "Multiple calcific plaques on the membrane"
+    },
+    "calcification": {
+      "label": "Calcification",
+      "description": "Calcified area on the tympanic membrane"
+    },
+    "inflammation": {
+      "label": "Inflammation",
+      "description": "Erythematous and inflamed tympanic membrane"
+    },
+    "hyperemia": {
+      "label": "Hyperemia",
+      "description": "Vascular erythema of the tympanic membrane"
+    },
+    "edema_membrane": {
+      "label": "Membrane edema",
+      "description": "Edematous thickening of the tympanic membrane"
+    },
+    "oma_acute": {
+      "label": "Acute otitis media",
+      "description": "Acute otitis media with bulging and erythematous membrane"
+    },
+    "oma_recurrent": {
+      "label": "Recurrent AOM",
+      "description": "Recurrent acute otitis media"
+    },
+    "omc_simple": {
+      "label": "Simple COM",
+      "description": "Simple chronic otitis media with perforation"
+    },
+    "omc_suppurative": {
+      "label": "Suppurative COM",
+      "description": "Chronic otitis media with active suppuration"
+    },
+    "ome": {
+      "label": "OME",
+      "description": "Otitis media with effusion (serous/secretory)"
+    },
+    "bulging": {
+      "label": "Bulging",
+      "description": "Convex/bulging tympanic membrane towards the exterior"
+    },
+    "bulging_focal": {
+      "label": "Focal bulging",
+      "description": "Localized bulging in one quadrant"
+    },
+    "bulging_diffuse": {
+      "label": "Diffuse bulging",
+      "description": "Generalized bulging of the entire membrane"
+    },
+    "cholesteatoma": {
+      "label": "Cholesteatoma",
+      "description": "Keratinized epithelial mass in the middle ear"
+    },
+    "cholesteatoma_attic": {
+      "label": "Attic cholesteatoma",
+      "description": "Cholesteatoma originating in the pars flaccida"
+    },
+    "cholesteatoma_sinus": {
+      "label": "Sinus cholesteatoma",
+      "description": "Cholesteatoma in the tympanic sinus"
+    },
+    "cholesteatoma_congenital": {
+      "label": "Congenital cholesteatoma",
+      "description": "White mass behind an intact tympanic membrane"
+    },
+    "keratin_debris": {
+      "label": "Keratin debris",
+      "description": "Keratin accumulation in retraction or perforation"
+    },
+    "pearl": {
+      "label": "Keratin pearl",
+      "description": "Visible cholesteatoma pearl"
+    },
+    "tube": {
+      "label": "Ventilation tube",
+      "description": "Ventilation tube (tympanostomy) in situ"
+    },
+    "tube_patent": {
+      "label": "Patent tube",
+      "description": "Patent and functional ventilation tube"
+    },
+    "tube_blocked": {
+      "label": "Blocked tube",
+      "description": "Ventilation tube blocked by secretion or tissue"
+    },
+    "tube_extruding": {
+      "label": "Extruding tube",
+      "description": "Ventilation tube in the process of extrusion"
+    },
+    "tube_medial": {
+      "label": "Medialized tube",
+      "description": "Tube displaced towards the middle ear cavity"
+    },
+    "myringitis": {
+      "label": "Myringitis",
+      "description": "Isolated inflammation of the tympanic membrane"
+    },
+    "myringitis_bullosa": {
+      "label": "Bullous myringitis",
+      "description": "Vesicles or bullae on the surface of the tympanic membrane"
+    },
+    "myringitis_granulosa": {
+      "label": "Granular myringitis",
+      "description": "Granulation tissue on the tympanic membrane"
+    },
+    "granulation": {
+      "label": "Granulation tissue",
+      "description": "Granulation tissue on or through the membrane"
+    },
+    "polyp": {
+      "label": "Polyp",
+      "description": "Aural polyp emerging from the middle ear through the membrane"
+    },
+    "granuloma": {
+      "label": "Granuloma",
+      "description": "Granuloma on the tympanic membrane or middle ear"
+    },
+    "tumor_middle_ear": {
+      "label": "Middle ear tumor",
+      "description": "Tumor mass visible through or on the membrane"
+    },
+    "glomus_tympanicum": {
+      "label": "Glomus tympanicum",
+      "description": "Pulsatile vascular mass visible behind the membrane (red/blue)"
+    },
+    "neomembrane": {
+      "label": "Neomembrane",
+      "description": "Regenerated tympanic membrane, thin and translucent"
+    },
+    "scarring": {
+      "label": "Scarring",
+      "description": "Scar tissue on the tympanic membrane"
+    },
+    "dimeric_membrane": {
+      "label": "Dimeric membrane",
+      "description": "Two-layer membrane (without fibrous layer)"
+    },
+    "monomeric_membrane": {
+      "label": "Monomeric membrane",
+      "description": "Single-layer membrane, extremely thin"
+    },
+    "myringoplasty": {
+      "label": "Myringoplasty",
+      "description": "Tympanic membrane repair graft"
+    },
+    "tympanoplasty": {
+      "label": "Tympanoplasty",
+      "description": "Result of previous tympanoplasty"
+    },
+    "cerumen": {
+      "label": "Cerumen on TM",
+      "description": "Cerumen in contact with the tympanic membrane"
+    },
+    "foreign_body": {
+      "label": "Foreign body on TM",
+      "description": "Foreign body in contact with the tympanic membrane"
+    },
+    "opaque": {
+      "label": "Opacity",
+      "description": "Opaque tympanic membrane, without normal translucency"
+    },
+    "loss_light_reflex": {
+      "label": "Loss of light reflex",
+      "description": "Absence of the normal light reflex of the membrane"
+    },
+    "vascular_injection": {
+      "label": "Vascular injection",
+      "description": "Prominent vessels on the surface of the membrane"
+    },
+    "neovascularization": {
+      "label": "Neovascularization",
+      "description": "Abnormal new blood vessels on the membrane"
+    },
+    "ossicular_erosion": {
+      "label": "Ossicular erosion",
+      "description": "Signs of ossicular chain erosion visible by transparency"
+    },
+    "ossicular_fixation": {
+      "label": "Ossicular fixation",
+      "description": "Findings suggestive of ossicular fixation"
+    },
+    "stapes_visible": {
+      "label": "Stapes visible",
+      "description": "Stapes visible due to retraction or perforation"
+    },
+    "promontory_visible": {
+      "label": "Promontory visible",
+      "description": "Promontory visible due to severe retraction or perforation"
+    },
+    "round_window_visible": {
+      "label": "Round window visible",
+      "description": "Round window visible through perforation"
+    },
+    "incus_necrosis": {
+      "label": "Incus necrosis",
+      "description": "Signs of necrosis of the long process of the incus"
+    },
+    "malleus_prominent": {
+      "label": "Prominent malleus handle",
+      "description": "Excessively visible malleus handle (retraction)"
+    },
+    "malleus_lateral": {
+      "label": "Lateralized malleus",
+      "description": "Lateral position of the malleus handle"
+    },
+    "retraction_pocket": {
+      "label": "Retraction pocket",
+      "description": "Deep retraction pocket with possible debris accumulation"
+    },
+    "adhesive_otitis": {
+      "label": "Adhesive otitis",
+      "description": "Membrane completely adherent to middle ear structures"
+    },
+    "traumatic_rupture": {
+      "label": "Traumatic rupture",
+      "description": "Recent perforation of traumatic origin"
+    },
+    "cae_normal": {
+      "label": "Normal",
+      "description": "Normal-appearing external auditory canal, patent"
+    },
+    "cae_cerumen": {
+      "label": "Cerumen",
+      "description": "Presence of cerumen in the ear canal"
+    },
+    "cae_cerumen_partial": {
+      "label": "Partial cerumen",
+      "description": "Cerumen partially obstructing the canal"
+    },
+    "cae_cerumen_impacted": {
+      "label": "Impacted cerumen",
+      "description": "Impacted cerumen completely obstructing the canal"
+    },
+    "cae_cerumen_wet": {
+      "label": "Wet cerumen",
+      "description": "Soft and moist cerumen"
+    },
+    "cae_cerumen_dry": {
+      "label": "Dry cerumen",
+      "description": "Hard and dry cerumen"
+    },
+    "cae_edema": {
+      "label": "Edema",
+      "description": "Edema of the ear canal skin"
+    },
+    "cae_otitis_externa_diffuse": {
+      "label": "Diffuse otitis externa",
+      "description": "Diffuse inflammation of the canal skin"
+    },
+    "cae_otitis_externa_necrotizing": {
+      "label": "Necrotizing otitis externa",
+      "description": "Malignant otitis externa with tissue necrosis"
+    },
+    "cae_furuncle": {
+      "label": "Furuncle",
+      "description": "Furuncle in the cartilaginous portion of the canal"
+    },
+    "cae_cellulitis": {
+      "label": "Cellulitis",
+      "description": "Cellulitis of the canal skin"
+    },
+    "cae_erythema": {
+      "label": "Erythema",
+      "description": "Erythema of the ear canal skin"
+    },
+    "cae_otorrhea": {
+      "label": "Otorrhea",
+      "description": "Discharge in the ear canal"
+    },
+    "cae_otorrhea_serous": {
+      "label": "Serous otorrhea",
+      "description": "Clear and transparent discharge"
+    },
+    "cae_otorrhea_mucoid": {
+      "label": "Mucoid otorrhea",
+      "description": "Thick and mucous discharge"
+    },
+    "cae_otorrhea_purulent": {
+      "label": "Purulent otorrhea",
+      "description": "Yellow-green purulent discharge"
+    },
+    "cae_otorrhea_bloody": {
+      "label": "Otorrhagia",
+      "description": "Bleeding from the ear canal"
+    },
+    "cae_otorrhea_fetid": {
+      "label": "Fetid otorrhea",
+      "description": "Foul-smelling discharge suggestive of cholesteatoma or anaerobes"
+    },
+    "cae_exostosis": {
+      "label": "Exostosis",
+      "description": "Multiple bilateral bony growths (surfer's ear)"
+    },
+    "cae_osteoma": {
+      "label": "Osteoma",
+      "description": "Single pedunculated bony growth"
+    },
+    "cae_eczema": {
+      "label": "Eczema",
+      "description": "Eczematous dermatitis of the canal"
+    },
+    "cae_dermatitis": {
+      "label": "Dermatitis",
+      "description": "Inflammation of the canal skin"
+    },
+    "cae_psoriasis": {
+      "label": "Psoriasis",
+      "description": "Psoriatic lesions in the ear canal"
+    },
+    "cae_seborrheic": {
+      "label": "Seborrheic dermatitis",
+      "description": "Seborrheic dermatitis of the ear canal"
+    },
+    "cae_keratosis": {
+      "label": "Keratosis",
+      "description": "Keratosis obturans of the ear canal"
+    },
+    "cae_otomycosis": {
+      "label": "Otomycosis",
+      "description": "Fungal infection of the ear canal"
+    },
+    "cae_otomycosis_aspergillus": {
+      "label": "Otomycosis (Aspergillus)",
+      "description": "Aspergillus infection with grayish/black masses"
+    },
+    "cae_otomycosis_candida": {
+      "label": "Otomycosis (Candida)",
+      "description": "Candida infection with whitish discharge"
+    },
+    "cae_foreign_body": {
+      "label": "Foreign body",
+      "description": "Foreign body in the ear canal"
+    },
+    "cae_insect": {
+      "label": "Insect",
+      "description": "Insect in the ear canal"
+    },
+    "cae_stenosis": {
+      "label": "Stenosis",
+      "description": "Narrowing of the ear canal"
+    },
+    "cae_stenosis_acquired": {
+      "label": "Acquired stenosis",
+      "description": "Stenosis due to previous surgery or chronic inflammation"
+    },
+    "cae_atresia": {
+      "label": "Atresia",
+      "description": "Absence or closure of the ear canal"
+    },
+    "cae_collapse": {
+      "label": "Collapse",
+      "description": "Collapse of the cartilaginous portion of the canal"
+    },
+    "cae_bleeding": {
+      "label": "Bleeding",
+      "description": "Active bleeding from the canal skin"
+    },
+    "cae_granulation": {
+      "label": "Granulation",
+      "description": "Granulation tissue in the ear canal"
+    },
+    "cae_tumor": {
+      "label": "Canal tumor",
+      "description": "Tumor mass in the ear canal"
+    },
+    "cae_carcinoma": {
+      "label": "Carcinoma",
+      "description": "Lesion suggestive of canal carcinoma"
+    },
+    "cae_mastoid_cavity": {
+      "label": "Mastoid cavity",
+      "description": "Radical or modified radical mastoidectomy cavity"
+    },
+    "cae_meatoplasty": {
+      "label": "Meatoplasty",
+      "description": "Surgically widened ear canal"
+    },
+    "cae_herpes_zoster": {
+      "label": "Herpetic vesicles (Herpes Zoster)",
+      "description": "Grouped vesicles on the external auditory canal or auricle due to varicella-zoster virus reactivation (Ramsay Hunt syndrome / otic shingles)"
+    },
+    "cae_hyperemia": {
+      "label": "EAC hyperemia",
+      "description": "Diffuse erythema of the external auditory canal skin due to increased vascularity"
+    },
+    "cae_microtia_i": {
+      "label": "Microtia grade I",
+      "description": "Smaller auricle with recognizable structures and near-normal shape; the EAC may be open with mild stenosis or present atresia"
+    },
+    "cae_microtia_ii": {
+      "label": "Microtia grade II",
+      "description": "Small and deformed auricle (cup-shaped or constricted ear), lacking most superior structures; the EAC is usually narrowed or closed"
+    },
+    "cae_microtia_iii": {
+      "label": "Microtia grade III",
+      "description": "Only a peanut-shaped cartilaginous remnant or small lobule is present, with no recognizable structures; almost always associated with complete aural atresia"
+    },
+    "cae_microtia_iv": {
+      "label": "Microtia grade IV (Anotia)",
+      "description": "Complete absence of the auricle, usually associated with external auditory canal atresia"
+    },
+    "cae_agenesis_a": {
+      "label": "Agenesis type A (Stenosis)",
+      "description": "Narrowing of the external auditory canal with intact skin"
+    },
+    "cae_agenesis_b": {
+      "label": "Agenesis type B (Medial stenosis)",
+      "description": "Severe narrowing of the EAC with radish-tail morphology or atretic plate in its medial portion"
+    },
+    "cae_agenesis_c": {
+      "label": "Agenesis type C (Bony atresia)",
+      "description": "Complete absence of the external auditory canal with bony atresia, frequently associated with middle ear malformations"
+    }
+  }
+}

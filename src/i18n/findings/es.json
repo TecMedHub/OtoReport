@@ -1,0 +1,568 @@
+{
+  "categories": {
+    "membrane": "Membrana Timpánica",
+    "cae": "Conducto Auditivo Externo"
+  },
+  "findings": {
+    "normal": {
+      "label": "Normal",
+      "description": "Membrana timpánica de aspecto normal, translúcida, con cono luminoso presente"
+    },
+    "retraction": {
+      "label": "Retracción",
+      "description": "Retracción de la membrana timpánica"
+    },
+    "retraction_grade_i": {
+      "label": "Retracción grado I",
+      "description": "Retracción leve sin contacto con estructuras del oído medio"
+    },
+    "retraction_grade_ii": {
+      "label": "Retracción grado II",
+      "description": "Retracción que contacta la articulación incudoestapedial"
+    },
+    "retraction_grade_iii": {
+      "label": "Retracción grado III",
+      "description": "Retracción que contacta el promontorio sin erosión ósea"
+    },
+    "retraction_grade_iv": {
+      "label": "Retracción grado IV",
+      "description": "Retracción adherida al promontorio con posible erosión ósea"
+    },
+    "retraction_as": {
+      "label": "Retracción anterosuperior",
+      "description": "Retracción localizada en el cuadrante anterosuperior"
+    },
+    "retraction_ai": {
+      "label": "Retracción anteroinferior",
+      "description": "Retracción localizada en el cuadrante anteroinferior"
+    },
+    "retraction_ps": {
+      "label": "Retracción posterosuperior",
+      "description": "Retracción localizada en el cuadrante posterosuperior"
+    },
+    "retraction_pi": {
+      "label": "Retracción posteroinferior",
+      "description": "Retracción localizada en el cuadrante posteroinferior"
+    },
+    "retraction_pars_flaccida": {
+      "label": "Retracción pars flácida",
+      "description": "Retracción de la pars flácida (bolsillo de Prussak)"
+    },
+    "retraction_pars_tensa": {
+      "label": "Retracción pars tensa",
+      "description": "Retracción difusa de la pars tensa"
+    },
+    "atelectasis": {
+      "label": "Atelectasia",
+      "description": "Retracción generalizada de toda la membrana timpánica"
+    },
+    "perforation": {
+      "label": "Perforación",
+      "description": "Perforación de la membrana timpánica"
+    },
+    "perforation_central": {
+      "label": "Perforación central",
+      "description": "Perforación en la porción central de la pars tensa"
+    },
+    "perforation_marginal": {
+      "label": "Perforación marginal",
+      "description": "Perforación que alcanza el anillo timpánico"
+    },
+    "perforation_subtotal": {
+      "label": "Perforación subtotal",
+      "description": "Perforación que abarca la mayor parte de la pars tensa"
+    },
+    "perforation_total": {
+      "label": "Perforación total",
+      "description": "Ausencia completa de la membrana timpánica"
+    },
+    "perforation_anterior": {
+      "label": "Perforación anterior",
+      "description": "Perforación ubicada en la mitad anterior"
+    },
+    "perforation_posterior": {
+      "label": "Perforación posterior",
+      "description": "Perforación ubicada en la mitad posterior"
+    },
+    "perforation_inferior": {
+      "label": "Perforación inferior",
+      "description": "Perforación ubicada en la porción inferior"
+    },
+    "perforation_attic": {
+      "label": "Perforación ático",
+      "description": "Perforación localizada en la pars flácida o ático"
+    },
+    "perforation_kidney": {
+      "label": "Perforación reniforme",
+      "description": "Perforación con forma de riñón"
+    },
+    "perforation_dry": {
+      "label": "Perforación seca",
+      "description": "Perforación sin secreción activa"
+    },
+    "perforation_wet": {
+      "label": "Perforación húmeda",
+      "description": "Perforación con secreción activa u otorrea"
+    },
+    "perforation_healed": {
+      "label": "Perforación cicatrizada",
+      "description": "Perforación previamente cicatrizada (membrana delgada)"
+    },
+    "effusion": {
+      "label": "Efusión",
+      "description": "Presencia de líquido en oído medio"
+    },
+    "effusion_serous": {
+      "label": "Efusión serosa",
+      "description": "Líquido claro y transparente en oído medio"
+    },
+    "effusion_mucoid": {
+      "label": "Efusión mucoide",
+      "description": "Líquido espeso y viscoso en oído medio (glue ear)"
+    },
+    "effusion_purulent": {
+      "label": "Efusión purulenta",
+      "description": "Líquido purulento en oído medio visible tras la membrana"
+    },
+    "air_fluid_level": {
+      "label": "Nivel hidroaéreo",
+      "description": "Nivel líquido-aire visible tras la membrana timpánica"
+    },
+    "air_bubbles": {
+      "label": "Burbujas de aire",
+      "description": "Burbujas de aire visibles tras la membrana timpánica"
+    },
+    "hemotympanum": {
+      "label": "Hemotímpano",
+      "description": "Sangre en la cavidad del oído medio"
+    },
+    "blue_ear": {
+      "label": "Oído azul",
+      "description": "Coloración azulada de la membrana por líquido hemático crónico"
+    },
+    "tympanosclerosis": {
+      "label": "Timpanoesclerosis",
+      "description": "Depósitos calcáreos blancos en la membrana timpánica"
+    },
+    "tympanosclerosis_focal": {
+      "label": "Timpanoesclerosis focal",
+      "description": "Placa calcárea localizada en un área específica"
+    },
+    "tympanosclerosis_diffuse": {
+      "label": "Timpanoesclerosis difusa",
+      "description": "Múltiples placas calcáreas en la membrana"
+    },
+    "calcification": {
+      "label": "Calcificación",
+      "description": "Área calcificada en la membrana timpánica"
+    },
+    "inflammation": {
+      "label": "Inflamación",
+      "description": "Membrana timpánica eritematosa e inflamada"
+    },
+    "hyperemia": {
+      "label": "Hiperemia",
+      "description": "Enrojecimiento vascular de la membrana timpánica"
+    },
+    "edema_membrane": {
+      "label": "Edema de membrana",
+      "description": "Engrosamiento edematoso de la membrana timpánica"
+    },
+    "oma_acute": {
+      "label": "OMA aguda",
+      "description": "Otitis media aguda con membrana abombada y eritematosa"
+    },
+    "oma_recurrent": {
+      "label": "OMA recurrente",
+      "description": "Otitis media aguda recurrente"
+    },
+    "omc_simple": {
+      "label": "OMC simple",
+      "description": "Otitis media crónica simple con perforación"
+    },
+    "omc_suppurative": {
+      "label": "OMC supurada",
+      "description": "Otitis media crónica con supuración activa"
+    },
+    "ome": {
+      "label": "OME",
+      "description": "Otitis media con efusión (serosa/secretora)"
+    },
+    "bulging": {
+      "label": "Abombamiento",
+      "description": "Membrana timpánica convexa/abombada hacia el exterior"
+    },
+    "bulging_focal": {
+      "label": "Abombamiento focal",
+      "description": "Abombamiento localizado en un cuadrante"
+    },
+    "bulging_diffuse": {
+      "label": "Abombamiento difuso",
+      "description": "Abombamiento generalizado de toda la membrana"
+    },
+    "cholesteatoma": {
+      "label": "Colesteatoma",
+      "description": "Masa de epitelio queratinizado en oído medio"
+    },
+    "cholesteatoma_attic": {
+      "label": "Colesteatoma ático",
+      "description": "Colesteatoma originado en la pars flácida"
+    },
+    "cholesteatoma_sinus": {
+      "label": "Colesteatoma seno",
+      "description": "Colesteatoma en el seno timpánico"
+    },
+    "cholesteatoma_congenital": {
+      "label": "Colesteatoma congénito",
+      "description": "Masa blanca tras membrana timpánica intacta"
+    },
+    "keratin_debris": {
+      "label": "Restos queratínicos",
+      "description": "Acumulación de queratina en retracción o perforación"
+    },
+    "pearl": {
+      "label": "Perla de queratina",
+      "description": "Perla de colesteatoma visible"
+    },
+    "tube": {
+      "label": "Tubo de ventilación",
+      "description": "Tubo de ventilación (timpanostomía) in situ"
+    },
+    "tube_patent": {
+      "label": "Tubo permeable",
+      "description": "Tubo de ventilación permeable y funcional"
+    },
+    "tube_blocked": {
+      "label": "Tubo obstruido",
+      "description": "Tubo de ventilación obstruido por secreción o tejido"
+    },
+    "tube_extruding": {
+      "label": "Tubo en extrusión",
+      "description": "Tubo de ventilación en proceso de expulsión"
+    },
+    "tube_medial": {
+      "label": "Tubo medializado",
+      "description": "Tubo desplazado hacia la cavidad del oído medio"
+    },
+    "myringitis": {
+      "label": "Miringitis",
+      "description": "Inflamación aislada de la membrana timpánica"
+    },
+    "myringitis_bullosa": {
+      "label": "Miringitis bullosa",
+      "description": "Vesículas o bullas en la superficie de la membrana timpánica"
+    },
+    "myringitis_granulosa": {
+      "label": "Miringitis granulosa",
+      "description": "Tejido de granulación sobre la membrana timpánica"
+    },
+    "granulation": {
+      "label": "Tejido de granulación",
+      "description": "Tejido de granulación sobre o a través de la membrana"
+    },
+    "polyp": {
+      "label": "Pólipo",
+      "description": "Pólipo aural emergiendo del oído medio a través de la membrana"
+    },
+    "granuloma": {
+      "label": "Granuloma",
+      "description": "Granuloma en la membrana timpánica o caja"
+    },
+    "tumor_middle_ear": {
+      "label": "Tumor oído medio",
+      "description": "Masa tumoral visible a través de o en la membrana"
+    },
+    "glomus_tympanicum": {
+      "label": "Glomus timpánico",
+      "description": "Masa vascular pulsátil visible tras la membrana (roja/azul)"
+    },
+    "neomembrane": {
+      "label": "Neomembrana",
+      "description": "Membrana timpánica regenerada, delgada y translúcida"
+    },
+    "scarring": {
+      "label": "Cicatriz",
+      "description": "Área cicatricial en la membrana timpánica"
+    },
+    "dimeric_membrane": {
+      "label": "Membrana dimérica",
+      "description": "Membrana de solo dos capas (sin capa fibrosa)"
+    },
+    "monomeric_membrane": {
+      "label": "Membrana monomérica",
+      "description": "Membrana de una sola capa, extremadamente delgada"
+    },
+    "myringoplasty": {
+      "label": "Miringoplastía",
+      "description": "Injerto de reparación de membrana timpánica"
+    },
+    "tympanoplasty": {
+      "label": "Timpanoplastía",
+      "description": "Resultado de timpanoplastía previa"
+    },
+    "cerumen": {
+      "label": "Cerumen sobre MT",
+      "description": "Cerumen en contacto con la membrana timpánica"
+    },
+    "foreign_body": {
+      "label": "Cuerpo extraño sobre MT",
+      "description": "Cuerpo extraño en contacto con la membrana timpánica"
+    },
+    "opaque": {
+      "label": "Opacidad",
+      "description": "Membrana timpánica opaca, sin translucidez normal"
+    },
+    "loss_light_reflex": {
+      "label": "Pérdida de cono luminoso",
+      "description": "Ausencia del reflejo luminoso normal de la membrana"
+    },
+    "vascular_injection": {
+      "label": "Inyección vascular",
+      "description": "Vasos prominentes en la superficie de la membrana"
+    },
+    "neovascularization": {
+      "label": "Neovascularización",
+      "description": "Vasos sanguíneos nuevos anormales en la membrana"
+    },
+    "ossicular_erosion": {
+      "label": "Erosión osicular",
+      "description": "Signos de erosión de la cadena osicular visible por transparencia"
+    },
+    "ossicular_fixation": {
+      "label": "Fijación osicular",
+      "description": "Hallazgos sugestivos de fijación osicular"
+    },
+    "stapes_visible": {
+      "label": "Estribo visible",
+      "description": "Estribo visible por retracción o perforación"
+    },
+    "promontory_visible": {
+      "label": "Promontorio visible",
+      "description": "Promontorio visible por retracción severa o perforación"
+    },
+    "round_window_visible": {
+      "label": "Ventana redonda visible",
+      "description": "Ventana redonda visible a través de perforación"
+    },
+    "incus_necrosis": {
+      "label": "Necrosis de yunque",
+      "description": "Signos de necrosis de la rama larga del yunque"
+    },
+    "malleus_prominent": {
+      "label": "Mango del martillo prominente",
+      "description": "Mango del martillo excesivamente visible (retracción)"
+    },
+    "malleus_lateral": {
+      "label": "Martillo lateralizado",
+      "description": "Posición lateral del mango del martillo"
+    },
+    "retraction_pocket": {
+      "label": "Bolsillo de retracción",
+      "description": "Bolsillo profundo de retracción con posible acumulación de debris"
+    },
+    "adhesive_otitis": {
+      "label": "Otitis adhesiva",
+      "description": "Membrana completamente adherida a las estructuras del oído medio"
+    },
+    "traumatic_rupture": {
+      "label": "Ruptura traumática",
+      "description": "Perforación reciente de origen traumático"
+    },
+    "cae_normal": {
+      "label": "Normal",
+      "description": "Conducto auditivo externo de aspecto normal, permeable"
+    },
+    "cae_cerumen": {
+      "label": "Cerumen",
+      "description": "Presencia de cerumen en el conducto auditivo"
+    },
+    "cae_cerumen_partial": {
+      "label": "Cerumen parcial",
+      "description": "Cerumen que obstruye parcialmente el conducto"
+    },
+    "cae_cerumen_impacted": {
+      "label": "Tapón de cerumen",
+      "description": "Cerumen impactado que obstruye completamente el conducto"
+    },
+    "cae_cerumen_wet": {
+      "label": "Cerumen húmedo",
+      "description": "Cerumen de consistencia blanda y húmeda"
+    },
+    "cae_cerumen_dry": {
+      "label": "Cerumen seco",
+      "description": "Cerumen de consistencia dura y seca"
+    },
+    "cae_edema": {
+      "label": "Edema",
+      "description": "Edema de la piel del conducto auditivo"
+    },
+    "cae_otitis_externa_diffuse": {
+      "label": "Otitis externa difusa",
+      "description": "Inflamación difusa de la piel del conducto"
+    },
+    "cae_otitis_externa_necrotizing": {
+      "label": "Otitis externa necrotizante",
+      "description": "Otitis externa maligna con necrosis tisular"
+    },
+    "cae_furuncle": {
+      "label": "Forúnculo",
+      "description": "Forúnculo en la porción cartilaginosa del conducto"
+    },
+    "cae_cellulitis": {
+      "label": "Celulitis",
+      "description": "Celulitis de la piel del conducto"
+    },
+    "cae_erythema": {
+      "label": "Eritema",
+      "description": "Enrojecimiento de la piel del conducto auditivo"
+    },
+    "cae_otorrhea": {
+      "label": "Otorrea",
+      "description": "Secreción en el conducto auditivo"
+    },
+    "cae_otorrhea_serous": {
+      "label": "Otorrea serosa",
+      "description": "Secreción clara y transparente"
+    },
+    "cae_otorrhea_mucoid": {
+      "label": "Otorrea mucoide",
+      "description": "Secreción espesa y mucosa"
+    },
+    "cae_otorrhea_purulent": {
+      "label": "Otorrea purulenta",
+      "description": "Secreción purulenta amarillo-verdosa"
+    },
+    "cae_otorrhea_bloody": {
+      "label": "Otorragia",
+      "description": "Sangrado del conducto auditivo"
+    },
+    "cae_otorrhea_fetid": {
+      "label": "Otorrea fétida",
+      "description": "Secreción maloliente sugestiva de colesteatoma o anaerobios"
+    },
+    "cae_exostosis": {
+      "label": "Exostosis",
+      "description": "Crecimientos óseos múltiples bilaterales (oído de surfista)"
+    },
+    "cae_osteoma": {
+      "label": "Osteoma",
+      "description": "Crecimiento óseo único y pediculado"
+    },
+    "cae_eczema": {
+      "label": "Eccema",
+      "description": "Dermatitis eccematosa del conducto"
+    },
+    "cae_dermatitis": {
+      "label": "Dermatitis",
+      "description": "Inflamación de la piel del conducto"
+    },
+    "cae_psoriasis": {
+      "label": "Psoriasis",
+      "description": "Lesiones psoriásicas en el conducto auditivo"
+    },
+    "cae_seborrheic": {
+      "label": "Dermatitis seborreica",
+      "description": "Dermatitis seborreica del conducto auditivo"
+    },
+    "cae_keratosis": {
+      "label": "Queratosis",
+      "description": "Queratosis obturante del conducto auditivo"
+    },
+    "cae_otomycosis": {
+      "label": "Otomicosis",
+      "description": "Infección fúngica del conducto auditivo"
+    },
+    "cae_otomycosis_aspergillus": {
+      "label": "Otomicosis (Aspergillus)",
+      "description": "Infección por Aspergillus con masas grisáceas/negras"
+    },
+    "cae_otomycosis_candida": {
+      "label": "Otomicosis (Candida)",
+      "description": "Infección por Candida con secreción blanquecina"
+    },
+    "cae_foreign_body": {
+      "label": "Cuerpo extraño",
+      "description": "Cuerpo extraño en el conducto auditivo"
+    },
+    "cae_insect": {
+      "label": "Insecto",
+      "description": "Insecto en el conducto auditivo"
+    },
+    "cae_stenosis": {
+      "label": "Estenosis",
+      "description": "Estrechamiento del conducto auditivo"
+    },
+    "cae_stenosis_acquired": {
+      "label": "Estenosis adquirida",
+      "description": "Estenosis por cirugía previa o inflamación crónica"
+    },
+    "cae_atresia": {
+      "label": "Atresia",
+      "description": "Ausencia o cierre del conducto auditivo"
+    },
+    "cae_collapse": {
+      "label": "Colapso",
+      "description": "Colapso de la porción cartilaginosa del conducto"
+    },
+    "cae_bleeding": {
+      "label": "Sangrado",
+      "description": "Sangrado activo de la piel del conducto"
+    },
+    "cae_granulation": {
+      "label": "Granulación",
+      "description": "Tejido de granulación en el conducto auditivo"
+    },
+    "cae_tumor": {
+      "label": "Tumor del conducto",
+      "description": "Masa tumoral en el conducto auditivo"
+    },
+    "cae_carcinoma": {
+      "label": "Carcinoma",
+      "description": "Lesión sugestiva de carcinoma del conducto"
+    },
+    "cae_mastoid_cavity": {
+      "label": "Cavidad mastoidea",
+      "description": "Cavidad de mastoidectomía radical o modificada"
+    },
+    "cae_meatoplasty": {
+      "label": "Meatoplastía",
+      "description": "Conducto ensanchado quirúrgicamente"
+    },
+    "cae_herpes_zoster": {
+      "label": "Vesículas herpéticas (Herpes Zóster)",
+      "description": "Vesículas agrupadas en el conducto auditivo externo o pabellón auricular por reactivación del virus varicela-zóster (síndrome de Ramsay Hunt / culebrilla ótica)"
+    },
+    "cae_hyperemia": {
+      "label": "Hiperemia del CAE",
+      "description": "Enrojecimiento difuso de la piel del conducto auditivo externo por aumento de la vascularización"
+    },
+    "cae_microtia_i": {
+      "label": "Microtia grado I",
+      "description": "Pabellón auricular de menor tamaño con estructuras reconocibles y forma similar a la normal; el CAE puede estar abierto con estenosis leve o presentar atresia"
+    },
+    "cae_microtia_ii": {
+      "label": "Microtia grado II",
+      "description": "Pabellón pequeño y deformado (oreja en forma de taza o constreñida), faltando la mayor parte de las estructuras superiores; el CAE suele estar estrechado o cerrado"
+    },
+    "cae_microtia_iii": {
+      "label": "Microtia grado III",
+      "description": "Solo se observa un remanente cartilaginoso en forma de cacahuate o lóbulo pequeño, sin estructuras reconocibles; casi siempre asociado a atresia aural completa"
+    },
+    "cae_microtia_iv": {
+      "label": "Microtia grado IV (Anotia)",
+      "description": "Ausencia completa del pabellón auricular, generalmente asociada a atresia del conducto auditivo externo"
+    },
+    "cae_agenesis_a": {
+      "label": "Agenesia tipo A (Estenosis)",
+      "description": "Estrechamiento del conducto auditivo externo con piel intacta"
+    },
+    "cae_agenesis_b": {
+      "label": "Agenesia tipo B (Estenosis medial)",
+      "description": "Estrechamiento severo del CAE con morfología en cola de rábano o placa de atresia en su porción medial"
+    },
+    "cae_agenesis_c": {
+      "label": "Agenesia tipo C (Atresia ósea)",
+      "description": "Ausencia completa del conducto auditivo externo con atresia ósea, frecuentemente asociada a malformaciones del oído medio"
+    }
+  }
+}

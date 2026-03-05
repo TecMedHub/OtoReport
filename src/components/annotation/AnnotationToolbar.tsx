@@ -47,8 +47,8 @@ export function AnnotationToolbar({
             className={cn(
               "rounded p-1.5 transition-colors",
               activeTool === type
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-500 hover:bg-gray-100"
+                ? "bg-accent-subtle text-accent-text"
+                : "text-text-tertiary hover:bg-bg-tertiary"
             )}
           >
             <Icon size={16} />
@@ -56,7 +56,7 @@ export function AnnotationToolbar({
         ))}
       </div>
 
-      <div className="h-6 w-px bg-gray-200" />
+      <div className="h-6 w-px bg-border-secondary" />
 
       <div className="flex gap-1">
         {colors.map((c) => (
@@ -65,14 +65,14 @@ export function AnnotationToolbar({
             onClick={() => onSelectColor(c)}
             className={cn(
               "h-5 w-5 rounded-full border-2 transition-transform",
-              activeColor === c ? "border-gray-800 scale-110" : "border-gray-300"
+              activeColor === c ? "border-text-primary scale-110" : "border-border-primary"
             )}
             style={{ backgroundColor: c }}
           />
         ))}
       </div>
 
-      <div className="h-6 w-px bg-gray-200" />
+      <div className="h-6 w-px bg-border-secondary" />
 
       {onUndo && (
         <button
@@ -81,8 +81,8 @@ export function AnnotationToolbar({
           className={cn(
             "rounded p-1.5 transition-colors",
             canUndo
-              ? "text-gray-500 hover:bg-gray-100"
-              : "text-gray-300 cursor-not-allowed"
+              ? "text-text-tertiary hover:bg-bg-tertiary"
+              : "text-text-tertiary/50 cursor-not-allowed"
           )}
           title="Deshacer"
         >
@@ -92,7 +92,7 @@ export function AnnotationToolbar({
 
       <button
         onClick={onClear}
-        className="text-xs text-red-500 hover:text-red-700"
+        className="text-xs text-danger-text hover:text-danger"
       >
         Limpiar todo
       </button>

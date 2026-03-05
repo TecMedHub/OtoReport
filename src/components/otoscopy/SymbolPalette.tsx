@@ -28,8 +28,8 @@ export function SymbolPalette({ selected, onSelect }: SymbolPaletteProps) {
           className={cn(
             "rounded px-2 py-1 text-xs font-medium transition-colors border",
             selected === type
-              ? "border-gray-800 ring-2 ring-gray-400"
-              : "border-gray-200 hover:border-gray-400"
+              ? "border-text-primary ring-2 ring-border-primary"
+              : "border-border-secondary hover:border-border-primary"
           )}
           style={{
             backgroundColor: selected === type ? color : `${color}20`,

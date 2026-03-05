@@ -1,3 +1,5 @@
+import i18n from "@/i18n/config";
+
 export function cn(
   ...classes: (string | boolean | undefined | null)[]
 ): string {
@@ -43,7 +45,8 @@ export function validateRut(rut: string): boolean {
 export function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const date = new Date(dateStr);
-  return date.toLocaleDateString("es-CL", {
+  const locale = i18n.language.startsWith("es") ? "es-CL" : "en-US";
+  return date.toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

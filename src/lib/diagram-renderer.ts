@@ -15,7 +15,6 @@ export async function renderDiagramToImage(
       marks,
       selectedFinding: null,
       onMarkQuadrant: () => {},
-      showLegend: true,
     })
   );
 
@@ -47,13 +46,11 @@ function svgToPng(
   height: number
 ): Promise<string> {
   return new Promise((resolve, reject) => {
-    const blob = new Blob([svgString], {
-      type: "image/svg+xml;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
+    const dataUrl = `data:image/svg+xml;base64,${btoa(
+      unescape(encodeURIComponent(svgString))
+    )}`;
     const img = new window.Image();
     const timeout = setTimeout(() => {
-      URL.revokeObjectURL(url);
       reject(new Error("SVG to PNG conversion timed out"));
     }, 5000);
     img.onload = () => {
@@ -63,14 +60,12 @@ function svgToPng(
       canvas.height = height;
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, width, height);
-      URL.revokeObjectURL(url);
       resolve(canvas.toDataURL("image/png"));
     };
     img.onerror = (e) => {
       clearTimeout(timeout);
-      URL.revokeObjectURL(url);
       reject(e);
     };
-    img.src = url;
+    img.src = dataUrl;
   });
 }

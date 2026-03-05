@@ -13,7 +13,8 @@ interface ImageAnnotatorProps {
   annotations: Annotation[];
   rotation: number;
   crop?: CropData | null;
-  onSave: (annotations: Annotation[], rotation: number, crop?: CropData | null) => void;
+  background?: "black" | "white" | "transparent";
+  onSave: (annotations: Annotation[], rotation: number, crop?: CropData | null, background?: "black" | "white" | "transparent") => void;
   onClose: () => void;
 }
 
@@ -35,6 +36,7 @@ export function ImageAnnotator({
   annotations: initialAnnotations,
   rotation: initialRotation,
   crop: initialCrop,
+  background: initialBackground,
   onSave,
   onClose,
 }: ImageAnnotatorProps) {
@@ -69,7 +71,7 @@ export function ImageAnnotator({
 
   // Circular crop background
   const [cropBg, setCropBg] = useState<"black" | "white" | "transparent">(
-    initialCrop?.background ?? "black"
+    initialBackground ?? initialCrop?.background ?? "black"
   );
 
   // Pivot drag state
@@ -230,6 +232,11 @@ export function ImageAnnotator({
       tmpCanvas.height = img.height;
       const tmpCtx = tmpCanvas.getContext("2d")!;
 
+      if (cropBg !== "transparent") {
+        tmpCtx.fillStyle = cropBg === "black" ? "#000000" : "#ffffff";
+        tmpCtx.fillRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+      }
+
       const pivotX = pivot ? pivot.x * tmpCanvas.width : tmpCanvas.width / 2;
       const pivotY = pivot ? pivot.y * tmpCanvas.height : tmpCanvas.height / 2;
       tmpCtx.save();
@@ -268,6 +275,11 @@ export function ImageAnnotator({
         canvas.width = sw;
         canvas.height = sh;
         ctx.clearRect(0, 0, sw, sh);
+        const bg = savedCrop.background || "black";
+        if (bg !== "transparent") {
+          ctx.fillStyle = bg === "black" ? "#000000" : "#ffffff";
+          ctx.fillRect(0, 0, sw, sh);
+        }
         ctx.drawImage(tmpCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
       }
 
@@ -280,6 +292,11 @@ export function ImageAnnotator({
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (rotation !== 0 && cropBg !== "transparent") {
+        ctx.fillStyle = cropBg === "black" ? "#000000" : "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
 
       const pivotX = pivot ? pivot.x * canvas.width : canvas.width / 2;
       const pivotY = pivot ? pivot.y * canvas.height : canvas.height / 2;
@@ -499,7 +516,7 @@ export function ImageAnnotator({
         ctx.restore();
       }
     }
-  }, [rotation, localAnnotations, loaded, cropStart, cropEnd, cropPending, activeTool, pivot, savedCrop]);
+  }, [rotation, localAnnotations, loaded, cropStart, cropEnd, cropPending, activeTool, pivot, savedCrop, cropBg]);
 
   useEffect(() => {
     draw();
@@ -544,6 +561,7 @@ export function ImageAnnotator({
         start: { x: Math.min(start.x, end.x), y: Math.min(start.y, end.y) },
         end: { x: Math.max(start.x, end.x), y: Math.max(start.y, end.y) },
         type: "crop-rect",
+        background: cropBg,
       });
     }
 
@@ -934,7 +952,7 @@ export function ImageAnnotator({
           <Button
             variant="primary"
             size="sm"
-            onClick={() => onSave(localAnnotations, rotation, savedCrop)}
+            onClick={() => onSave(localAnnotations, rotation, savedCrop, cropBg)}
           >
             Guardar
           </Button>
@@ -956,31 +974,29 @@ export function ImageAnnotator({
         {/* Crop action bar */}
         {cropPending && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 shadow-lg">
-            {cropPending.type === "crop-circle" && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-400">Fondo:</span>
-                {([
-                  { value: "black" as const, color: "#000000", border: "border-gray-500" },
-                  { value: "white" as const, color: "#ffffff", border: "border-gray-500" },
-                  { value: "transparent" as const, color: "", border: "border-gray-500" },
-                ]).map(({ value, color, border }) => (
-                  <button
-                    key={value}
-                    onClick={() => setCropBg(value)}
-                    title={value === "black" ? "Negro" : value === "white" ? "Blanco" : "Transparente"}
-                    className={cn(
-                      "h-5 w-5 rounded-full border-2 transition-transform",
-                      cropBg === value ? "scale-110 border-blue-400" : border
-                    )}
-                    style={
-                      value === "transparent"
-                        ? { background: "repeating-conic-gradient(#808080 0% 25%, #c0c0c0 0% 50%) 50%/8px 8px" }
-                        : { backgroundColor: color }
-                    }
-                  />
-                ))}
-              </div>
-            )}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-400">Fondo:</span>
+              {([
+                { value: "black" as const, color: "#000000", border: "border-gray-500" },
+                { value: "white" as const, color: "#ffffff", border: "border-gray-500" },
+                { value: "transparent" as const, color: "", border: "border-gray-500" },
+              ]).map(({ value, color, border }) => (
+                <button
+                  key={value}
+                  onClick={() => setCropBg(value)}
+                  title={value === "black" ? "Negro" : value === "white" ? "Blanco" : "Transparente"}
+                  className={cn(
+                    "h-5 w-5 rounded-full border-2 transition-transform",
+                    cropBg === value ? "scale-110 border-blue-400" : border
+                  )}
+                  style={
+                    value === "transparent"
+                      ? { background: "repeating-conic-gradient(#808080 0% 25%, #c0c0c0 0% 50%) 50%/8px 8px" }
+                      : { backgroundColor: color }
+                  }
+                />
+              ))}
+            </div>
             <Button variant="primary" size="sm" onClick={applyCrop}>
               <Check size={14} className="mr-1" />
               Aplicar recorte
@@ -989,6 +1005,34 @@ export function ImageAnnotator({
               <X size={14} className="mr-1" />
               Cancelar
             </Button>
+          </div>
+        )}
+        {/* Rotate background selector */}
+        {activeTool === "rotate" && !cropPending && (
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 shadow-lg">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-400">Fondo:</span>
+              {([
+                { value: "black" as const, color: "#000000", border: "border-gray-500" },
+                { value: "white" as const, color: "#ffffff", border: "border-gray-500" },
+                { value: "transparent" as const, color: "", border: "border-gray-500" },
+              ]).map(({ value, color, border }) => (
+                <button
+                  key={value}
+                  onClick={() => setCropBg(value)}
+                  title={value === "black" ? "Negro" : value === "white" ? "Blanco" : "Transparente"}
+                  className={cn(
+                    "h-5 w-5 rounded-full border-2 transition-transform",
+                    cropBg === value ? "scale-110 border-blue-400" : border
+                  )}
+                  style={
+                    value === "transparent"
+                      ? { background: "repeating-conic-gradient(#808080 0% 25%, #c0c0c0 0% 50%) 50%/8px 8px" }
+                      : { backgroundColor: color }
+                  }
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>

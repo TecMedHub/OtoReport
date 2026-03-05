@@ -1,0 +1,358 @@
+{
+  "profileSelector": {
+    "title": "¿Quién está usando OtoReport?",
+    "add": "Agregar",
+    "manage": "Administrar perfiles",
+    "newProfile": "Nuevo perfil",
+    "editProfile": "Editar perfil",
+    "name": "Nombre",
+    "color": "Color",
+    "create": "Crear perfil",
+    "done": "Listo"
+  },
+  "setup": {
+    "welcome": "Bienvenido a OtoReport",
+    "selectFolder": "Selecciona una carpeta de trabajo para almacenar tus informes",
+    "start": "Comenzar",
+    "whatIsYourName": "¿Cómo te llamas?",
+    "namePlaceholder": "TM ORL; DR.; FGLO; Jaime García",
+    "nameHelp": "Este nombre aparecerá en tus informes como examinador",
+    "selectFolderAction": "Seleccionar carpeta de trabajo"
+  },
+  "history": {
+    "title": "Historial",
+    "noSessions": "No hay sesiones registradas",
+    "wash": "Lavado",
+    "completed": "Completado",
+    "inProgress": "En progreso"
+  },
+  "ear": {
+    "right": "Oído Derecho (OD)",
+    "left": "Oído Izquierdo (OI)",
+    "findingToMark": "Hallazgo a marcar:",
+    "observations": "Observaciones",
+    "observationsPlaceholder": "Observaciones adicionales...",
+    "images": "Imágenes",
+    "loadingImages": "Cargando imágenes...",
+    "openingEditor": "Abriendo editor...",
+    "imageFilterName": "Imágenes"
+  },
+  "report": {
+    "title": "Informe",
+    "new": "Nuevo Informe",
+    "edit": "Editar Informe",
+    "save": "Guardar Informe",
+    "saving": "Guardando...",
+    "preview": "Vista Previa PDF",
+    "metadata": {
+      "patientDetails": "Ver detalles paciente",
+      "examiner": "Examinador",
+      "equipment": "Equipo",
+      "phone": "Tel",
+      "email": "Email",
+      "birthDate": "F. Nac"
+    },
+    "findings": {
+      "configure": "Configurar hallazgos",
+      "update": "Actualizar hallazgos",
+      "updateTitle": "Configurar biblioteca de hallazgos",
+      "updateDescription": "Actualiza los checks de hallazgos a la configuración actual del workspace"
+    },
+    "earWash": {
+      "pre": "Pre-Lavado",
+      "post": "Post-Lavado",
+      "import": "Importar desde otoscopía anterior",
+      "importTitle": "Importar a {{phase}}",
+      "importing": "Importando datos...",
+      "noSessions": "No hay otras sesiones para este paciente",
+      "selectSession": "Selecciona una sesión para copiar sus datos de oídos (hallazgos, marcas, observaciones e imágenes):",
+      "types": {
+        "ear_wash": "Lavado de Oído",
+        "otoscopy": "Otoscopía"
+      },
+      "status": {
+        "completed": "Completado",
+        "in_progress": "En progreso"
+      }
+    },
+    "conclusion": {
+      "label": "Conclusión",
+      "placeholder": "Conclusión del examen..."
+    },
+    "patientExisting": "Paciente existente — datos autocompletados",
+    "reportStarted": "Informe iniciado",
+    "patientCreatedAndReportStarted": "Paciente creado e informe iniciado",
+    "startReport": "Comenzar Informe",
+    "reportType": "Tipo de Informe",
+    "readOnly": "Solo lectura"
+  },
+  "pdf": {
+    "sections": {
+      "header": "Encabezado",
+      "logo": "Incluir logo",
+      "patient_info": "Datos del paciente",
+      "exam_info": "Datos del examen",
+      "diagram": "Diagrama timpánico",
+      "findings": "Hallazgos",
+      "observations": "Observaciones",
+      "images": "Imágenes",
+      "annotations": "Anotaciones en imágenes",
+      "conclusion": "Conclusión",
+      "footer": "Pie de página"
+    },
+    "labels": {
+      "patientData": "Datos del Paciente",
+      "examData": "Datos del Examen",
+      "examiner": "Examinador",
+      "equipment": "Equipo",
+      "rightEar": "Oído Derecho (OD)",
+      "leftEar": "Oído Izquierdo (OI)",
+      "observations": "Observaciones",
+      "conclusion": "Conclusión",
+      "page": "Página {{current}} de {{total}}"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "tabs": {
+      "general": "General",
+      "report": "Informe",
+      "findings": "Hallazgos",
+      "profiles": "Perfiles",
+      "about": "Acerca de"
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "themes": {
+        "dracula": "Dracula",
+        "alucard": "Alucard",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "wine": "Burdeo",
+        "wine-light": "Burdeo Claro"
+      }
+    },
+    "workspace": {
+      "title": "Carpeta de Trabajo",
+      "notConfigured": "No configurado",
+      "change": "Cambiar"
+    },
+    "center": {
+      "title": "Centro de Salud y Examinador",
+      "name": "Nombre del centro",
+      "address": "Dirección",
+      "phone": "Teléfono",
+      "email": "Email",
+      "logo": "Logo del centro",
+      "changeLogo": "Cambiar logo",
+      "selectLogo": "Seleccionar logo",
+      "examiner": "Nombre del examinador",
+      "equipment": "Equipo utilizado"
+    },
+    "reportPrefs": {
+      "title": "Preferencias del Informe",
+      "otoscopyTitle": "Título del informe (Otoscopía)",
+      "earWashTitle": "Título del informe (Lavado de Oído)",
+      "sections": "Secciones del informe",
+      "reset": "Restablecer",
+      "imageSize": "Tamaño de imágenes",
+      "imagesPerRow": "Imágenes por fila",
+      "reportColor": "Color del informe",
+      "preview": "Vista previa",
+      "sizes": {
+        "small": "Pequeño",
+        "medium": "Mediano",
+        "large": "Grande"
+      }
+    },
+    "findings": {
+      "title": "Biblioteca de Hallazgos",
+      "subtitle": "Agrega, quita y personaliza hallazgos. Los cambios aplican a informes nuevos.",
+      "addCategory": "Categoría",
+      "reset": "Restablecer",
+      "categoryName": "Nombre de la categoría",
+      "findingCount": "{{count}} hallazgo",
+      "findingCount_plural": "{{count}} hallazgos",
+      "descriptionPlaceholder": "Descripción breve...",
+      "addFinding": "Agregar hallazgo",
+      "newCategory": "Nueva categoría",
+      "removeCategory": "Eliminar categoría",
+      "removeFinding": "Quitar hallazgo",
+      "calibrateSprites": "Calibrar sprites"
+    },
+    "profiles": {
+      "activeTitle": "Perfil activo",
+      "examinerSubtitle": "Examinador en informes",
+      "changeProfile": "Cambiar perfil",
+      "listTitle": "Perfiles",
+      "addProfile": "Agregar perfil",
+      "newProfile": "Nuevo perfil",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "create": "Crear",
+      "active": "Activo",
+      "placeholder": "Nombre del examinador"
+    },
+    "about": {
+      "title": "OtoReport",
+      "subtitle": "Software de informes otoscópicos",
+      "version": "Versión",
+      "projectTitle": "Acerca del proyecto",
+      "projectDescription": "OtoReport es un software desarrollado en TecMedHub para la generación de informes otoscópicos en el ámbito clínico. Surge frente a la necesidad de contar con una herramienta estandarizada y eficiente para documentar hallazgos otoscópicos.",
+      "aiTitle": "oIR — IA de detección y clasificación",
+      "aiDescription": "Estamos trabajando en oIR, un sistema de inteligencia artificial para la detección y clasificación avanzada de hallazgos otoscópicos.",
+      "collabInvitation": "Todos son bienvenidos a colaborar en este proyecto.",
+      "teamTitle": "Equipo de desarrollo",
+      "teamLeader": "Líder del proyecto",
+      "mandator": "Mandante",
+      "teamWork": "Equipo de trabajo",
+      "reviewers": "Revisores",
+      "findingsLibraryTitle": "Biblioteca de Hallazgos Otoscópicos",
+      "findingsLibraryDescription": "La biblioteca de hallazgos de OtoReport es un repositorio abierto y colaborativo que reúne descripciones estandarizadas de hallazgos otoscópicos para uso clínico y educativo.",
+      "findingsLibraryContribute": "Invitamos a profesionales de la salud auditiva a contribuir con nuevos hallazgos, correcciones o mejoras. Para colaborar, es fundamental seguir las normas éticas establecidas:",
+      "findingsLibraryEthics1": "Las descripciones deben basarse en evidencia clínica y literatura científica actualizada.",
+      "findingsLibraryEthics2": "No incluir datos personales de pacientes ni información que permita su identificación.",
+      "findingsLibraryEthics3": "Las imágenes aportadas deben contar con consentimiento informado y estar anonimizadas.",
+      "findingsLibraryEthics4": "El contenido debe ser respetuoso, objetivo y orientado al beneficio clínico-educativo.",
+      "findingsLibraryEthics5": "Respetar la autoría y citar las fuentes cuando corresponda.",
+      "findingsLibraryContact": "Si deseas colaborar o tienes consultas, escríbenos por Instagram:",
+      "equipmentTitle": "Video Otoscopios Recomendados",
+      "equipmentDescription": "Equipos probados y recomendados por la comunidad para uso clínico con OtoReport.",
+      "equipmentLoading": "Cargando equipos recomendados...",
+      "equipmentOffline": "No se pudo cargar la lista de equipos",
+      "equipmentRetry": "Reintentar",
+      "equipmentShareExperience": "¿Usas un video otoscopio que no está listado? Cuéntanos tu experiencia por Instagram:"
+    },
+    "save": "Guardar Configuración",
+    "saved": "Guardado"
+  },
+  "patients": {
+    "title": "Pacientes",
+    "name": "Nombre",
+    "rut": "RUT",
+    "age": "Edad",
+    "ageYears": "años",
+    "phone": "Teléfono",
+    "email": "Email",
+    "birthDate": "Fecha de nacimiento",
+    "notes": "Notas",
+    "createdAt": "Creado",
+    "updatedAt": "Actualizado",
+    "new": "Nuevo Paciente",
+    "edit": "Editar Paciente",
+    "newReport": "Nuevo Informe",
+    "confirmDeleteTitle": "Confirmar eliminación",
+    "confirmDeleteMessage": "¿Eliminar este paciente y todos sus datos? Esta acción no se puede deshacer.",
+    "updated": "Paciente actualizado",
+    "created": "Paciente creado",
+    "deleted": "Paciente eliminado",
+    "search": "Buscar paciente...",
+    "noPatients": "No hay pacientes registrados",
+    "addFirst": "Registrar el primer paciente",
+    "form": {
+      "nameLabel": "Nombre completo",
+      "nameRequired": "Nombre requerido",
+      "rutInvalid": "RUT inválido",
+      "birthDateRequired": "Fecha requerida",
+      "emailInvalid": "Email inválido",
+      "update": "Actualizar Paciente",
+      "create": "Crear Paciente"
+    },
+    "detail": {
+      "back": "Volver a pacientes",
+      "edit": "Editar paciente",
+      "reports": "Informes",
+      "noReports": "Sin informes aún",
+      "createFirst": "Crear primer informe",
+      "duplicateReport": "Duplicar informe",
+      "deleteReport": "Eliminar informe",
+      "confirmDeleteReport": "¿Eliminar este informe y todas sus imágenes? Esta acción no se puede deshacer.",
+      "reportDeleted": "Informe eliminado",
+      "reportDuplicated": "Informe duplicado",
+      "deleteError": "Error al eliminar",
+      "duplicateError": "Error al duplicar",
+      "patientNotFound": "Paciente no encontrado"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Bienvenido",
+    "subtitle": "Sistema de informes de otoscopía clínica",
+    "newReport": "Nuevo Informe",
+    "patients": "Pacientes"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "patients": "Pacientes",
+    "newReport": "Nuevo Informe",
+    "history": "Historial",
+    "findingsLibrary": "Biblioteca de Hallazgos",
+    "settings": "Configuración"
+  },
+  "header": {
+    "changeProfile": "Cambiar perfil",
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar",
+    "close": "Cerrar"
+  },
+  "findings": {
+    "labels": {
+      "retraction": "Retracción",
+      "perforation": "Perforación",
+      "effusion": "Efusión",
+      "tympanosclerosis": "Timpanoesclerosis",
+      "cholesteatoma": "Colesteatoma",
+      "inflammation": "Inflamación",
+      "tube": "Tubo",
+      "myringitis": "Miringitis"
+    }
+  },
+  "findingsLibrary": {
+    "title": "Biblioteca de Hallazgos",
+    "subtitle": "Referencia visual de hallazgos otoscópicos con imágenes clínicas",
+    "membrane": "Membrana Timpánica",
+    "cae": "Conducto Auditivo Externo",
+    "all": "Todos",
+    "search": "Buscar hallazgo...",
+    "noResults": "No se encontraron hallazgos",
+    "noImages": "Sin imagen disponible",
+    "loadingImages": "Cargando imágenes...",
+    "imageError": "Error al cargar imagen",
+    "totalFindings": "{{count}} hallazgos",
+    "offline": "No se pudo conectar al repositorio de imágenes",
+    "offlineHint": "Verifica tu conexión a internet. Las imágenes se descargan desde GitHub.",
+    "retry": "Reintentar",
+    "collaborate": "¿Quieres contribuir con imágenes clínicas? Selecciona un hallazgo o visita Configuración.",
+    "collaborateLink": "Ir a Configuración",
+    "contribute": "Contribuir",
+    "contributedBy": "Imagen aportada por"
+  },
+  "contribute": {
+    "title": "Contribuir imagen",
+    "back": "Volver a Biblioteca",
+    "contributorName": "Nombre del colaborador",
+    "namePlaceholder": "Dr. Juan Pérez",
+    "image": "Imagen clínica",
+    "selectImage": "Seleccionar imagen",
+    "changeImage": "Cambiar imagen",
+    "annotate": "Anotar imagen",
+    "annotationCount": "{{count}} anotaciones aplicadas",
+    "generate": "Generar paquete de contribución",
+    "generating": "Generando...",
+    "success": "Paquete generado correctamente. Envíalo a TecMedHub para su revisión.",
+    "instructions": "Se generará un archivo .zip con la imagen, anotaciones y metadatos. Envíalo al equipo de TecMedHub por Instagram o GitHub para incluirlo en la biblioteca."
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "noResults": "No se encontraron resultados",
+    "noFindings": "Sin hallazgos"
+  }
+}

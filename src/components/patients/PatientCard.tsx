@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Pencil, Trash2, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { formatDate } from "@/lib/utils";
@@ -18,32 +19,33 @@ export function PatientCard({
   onNewReport,
 }: PatientCardProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <div className="rounded-xl border border-border-secondary bg-bg-secondary shadow-sm transition-shadow hover:shadow-md">
       {/* Zona clickeable → detalle del paciente */}
       <button
         onClick={() => navigate(`/patients/${patient.id}`)}
         className="w-full p-4 pb-2 text-left"
       >
-        <h3 className="font-semibold text-gray-800">{patient.name}</h3>
-        <p className="text-sm text-gray-500">{patient.rut}</p>
-        <div className="mt-2 space-y-0.5 text-sm text-gray-600">
-          <p>Edad: {patient.age} años</p>
-          {patient.phone && <p>Tel: {patient.phone}</p>}
-          <p className="text-xs text-gray-400">
-            Creado: {formatDate(patient.created_at)}
+        <h3 className="font-semibold text-text-primary">{patient.name}</h3>
+        <p className="text-sm text-text-tertiary">{patient.rut}</p>
+        <div className="mt-2 space-y-0.5 text-sm text-text-secondary">
+          <p>{t("patients.age")}: {patient.age} {t("patients.ageYears")}</p>
+          {patient.phone && <p>{t("patients.phone")}: {patient.phone}</p>}
+          <p className="text-xs text-text-tertiary">
+            {t("patients.createdAt")}: {formatDate(patient.created_at)}
           </p>
         </div>
       </button>
 
       {/* Acciones rápidas */}
-      <div className="flex gap-1 border-t border-gray-100 px-4 py-2">
+      <div className="flex gap-1 border-t border-border-secondary px-4 py-2">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => onNewReport(patient)}
-          title="Nuevo informe"
+          title={t("patients.newReport")}
         >
           <FilePlus size={16} />
         </Button>
@@ -51,7 +53,7 @@ export function PatientCard({
           variant="ghost"
           size="sm"
           onClick={() => onEdit(patient)}
-          title="Editar"
+          title={t("common.edit")}
         >
           <Pencil size={16} />
         </Button>
@@ -59,9 +61,9 @@ export function PatientCard({
           variant="ghost"
           size="sm"
           onClick={() => onDelete(patient.id)}
-          title="Eliminar"
+          title={t("common.delete")}
         >
-          <Trash2 size={16} className="text-red-500" />
+          <Trash2 size={16} className="text-danger" />
         </Button>
       </div>
     </div>

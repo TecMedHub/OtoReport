@@ -13,7 +13,7 @@ export function DeviceSelector({
 }: DeviceSelectorProps) {
   if (devices.length === 0) {
     return (
-      <span className="flex items-center gap-2 text-sm text-yellow-400">
+      <span className="flex items-center gap-2 text-sm text-warning-text">
         <Video size={16} />
         Buscando cámaras...
       </span>
@@ -22,7 +22,7 @@ export function DeviceSelector({
 
   return (
     <div className="flex items-center gap-2">
-      <Video size={16} className="text-gray-400" />
+      <Video size={16} className="text-text-tertiary" />
       <select
         value={activeDeviceId}
         onChange={(e) => onSelect(e.target.value)}

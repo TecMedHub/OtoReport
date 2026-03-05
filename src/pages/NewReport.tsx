@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 import { v4 as uuidv4 } from "uuid";
 import { Header } from "@/components/layout/Header";
@@ -12,10 +13,11 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
 import { formatRut, cleanRut, validateRut, calculateAge } from "@/lib/utils";
-import { CheckCircle } from "lucide-react";
-import type { Patient } from "@/types";
+import { CheckCircle, Stethoscope, Droplets } from "lucide-react";
+import type { Patient, ReportType } from "@/types";
 
 export function NewReport() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const patientIdParam = searchParams.get("patient");
   const sessionIdParam = searchParams.get("session");
@@ -34,6 +36,7 @@ export function NewReport() {
   const [patientPhone, setPatientPhone] = useState("");
   const [patientEmail, setPatientEmail] = useState("");
   const [rutValid, setRutValid] = useState(false);
+  const [reportType, setReportType] = useState<ReportType>("otoscopy");
   const [initializing, setInitializing] = useState(true);
 
   // Dropdown state
@@ -135,15 +138,15 @@ export function NewReport() {
         };
 
     await invoke("save_patient", { patient });
-    await createSession(patient);
-    toast(foundPatient ? "Informe iniciado" : "Paciente creado e informe iniciado", "success");
+    await createSession(patient, reportType);
+    toast(foundPatient ? t("report.reportStarted") : t("report.patientCreatedAndReportStarted"), "success");
   }
 
   // Loading para edición de informe existente
   if (initializing && (patientIdParam || sessionIdParam)) {
     return (
       <>
-        <Header title="Nuevo Informe" />
+        <Header title={t("report.new")} />
         <div className="flex flex-1 items-center justify-center">
           <Spinner />
         </div>
@@ -154,9 +157,10 @@ export function NewReport() {
   // Ya hay informe cargado → mostrar formulario
   if (report) {
     const isReadOnly = report.status === "completed";
+    const typeLabel = report.report_type === "ear_wash" ? t("report.earWash.types.ear_wash") : t("report.earWash.types.otoscopy");
     return (
       <>
-        <Header title={isReadOnly ? "Informe (Solo lectura)" : "Informe"} />
+        <Header title={isReadOnly ? `${typeLabel} (${t("report.readOnly")})` : typeLabel} />
         <div className="flex-1 overflow-auto p-6">
           <ReportForm
             report={report}
@@ -172,19 +176,19 @@ export function NewReport() {
 
   return (
     <>
-      <Header title="Nuevo Informe" />
+      <Header title={t("report.new")} />
       <div className="flex-1 overflow-auto p-6">
         <div className="mx-auto max-w-lg space-y-6">
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-800">
-              Datos del Paciente
+          <div className="rounded-xl border border-border-secondary bg-bg-secondary p-6">
+            <h3 className="mb-4 text-lg font-semibold text-text-primary">
+              {t("pdf.labels.patientData")}
             </h3>
 
             <div className="space-y-4">
               {/* RUT con dropdown de sugerencias */}
               <div className="relative" ref={wrapperRef}>
                 <Input
-                  label="RUT"
+                  label={t("patients.rut")}
                   id="rut"
                   value={formatRut(rutInput)}
                   onChange={(e) => handleRutChange(e.target.value)}
@@ -192,29 +196,29 @@ export function NewReport() {
                   placeholder="12.345.678-5"
                   autoComplete="off"
                   error={
-                    rutInput.length > 0 && !rutValid ? "RUT inválido" : undefined
+                    rutInput.length > 0 && !rutValid ? t("patients.form.rutInvalid") : undefined
                   }
                 />
 
                 {/* Dropdown sugerencias */}
                 {showSuggestions && suggestions.length > 0 && !foundPatient && (
-                  <div className="absolute z-20 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
+                  <div className="absolute z-20 mt-1 w-full rounded-lg border border-border-secondary bg-bg-secondary shadow-lg">
                     <div className="max-h-48 overflow-auto py-1">
                       {suggestions.map((p) => (
                         <button
                           key={p.id}
                           onClick={() => selectPatient(p)}
-                          className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-blue-50 transition-colors"
+                          className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-accent-subtle transition-colors"
                         >
                           <div className="flex-1">
-                            <p className="font-medium text-gray-800">
+                            <p className="font-medium text-text-primary">
                               {p.name}
                             </p>
-                            <p className="text-xs text-gray-500">{p.rut}</p>
+                            <p className="text-xs text-text-tertiary">{p.rut}</p>
                           </div>
                           {p.age > 0 && (
-                            <span className="text-xs text-gray-400">
-                              {p.age} años
+                            <span className="text-xs text-text-tertiary">
+                              {p.age} {t("patients.ageYears")}
                             </span>
                           )}
                         </button>
@@ -225,14 +229,14 @@ export function NewReport() {
               </div>
 
               {foundPatient && (
-                <div className="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
+                <div className="flex items-center gap-2 rounded-lg bg-success-subtle px-3 py-2 text-sm text-success-text">
                   <CheckCircle size={16} />
-                  Paciente existente — datos autocompletados
+                  {t("report.patientExisting")}
                 </div>
               )}
 
               <Input
-                label="Nombre completo"
+                label={t("patients.form.nameLabel")}
                 id="name"
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
@@ -240,7 +244,7 @@ export function NewReport() {
               />
 
               <Input
-                label="Fecha de nacimiento"
+                label={t("patients.birthDate")}
                 id="birth_date"
                 type="date"
                 value={patientBirthDate}
@@ -249,14 +253,14 @@ export function NewReport() {
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Teléfono"
+                  label={t("patients.phone")}
                   id="phone"
                   value={patientPhone}
                   onChange={(e) => setPatientPhone(e.target.value)}
                   placeholder="+56 9 1234 5678"
                 />
                 <Input
-                  label="Email"
+                  label={t("patients.email")}
                   id="email"
                   type="email"
                   value={patientEmail}
@@ -267,12 +271,45 @@ export function NewReport() {
             </div>
           </div>
 
+          {/* Tipo de informe */}
+          <div className="rounded-xl border border-border-secondary bg-bg-secondary p-6">
+            <h3 className="mb-4 text-lg font-semibold text-text-primary">
+              {t("report.reportType")}
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setReportType("otoscopy")}
+                className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                  reportType === "otoscopy"
+                    ? "border-accent bg-accent-subtle text-accent-text"
+                    : "border-border-secondary bg-bg-tertiary text-text-secondary hover:border-border-primary"
+                }`}
+              >
+                <Stethoscope size={24} />
+                <span className="text-sm font-medium">{t("report.earWash.types.otoscopy")}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setReportType("ear_wash")}
+                className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                  reportType === "ear_wash"
+                    ? "border-accent bg-accent-subtle text-accent-text"
+                    : "border-border-secondary bg-bg-tertiary text-text-secondary hover:border-border-primary"
+                }`}
+              >
+                <Droplets size={24} />
+                <span className="text-sm font-medium">{t("report.earWash.types.ear_wash")}</span>
+              </button>
+            </div>
+          </div>
+
           <Button
             onClick={handleStartReport}
             disabled={!rutValid || !patientName.trim()}
             className="w-full py-3"
           >
-            Comenzar Informe
+            {t("report.startReport")}
           </Button>
         </div>
       </div>

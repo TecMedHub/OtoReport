@@ -6,7 +6,8 @@ export function compositeAnnotations(
   annotations: Annotation[],
   rotation: number,
   pivot?: { x: number; y: number } | null,
-  crop?: CropData | null
+  crop?: CropData | null,
+  background?: "black" | "white" | "transparent"
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new window.Image();
@@ -16,6 +17,11 @@ export function compositeAnnotations(
       fullCanvas.width = img.width;
       fullCanvas.height = img.height;
       const fullCtx = fullCanvas.getContext("2d")!;
+
+      if (background && background !== "transparent") {
+        fullCtx.fillStyle = background === "black" ? "#000000" : "#ffffff";
+        fullCtx.fillRect(0, 0, fullCanvas.width, fullCanvas.height);
+      }
 
       const pivotX = pivot ? pivot.x * fullCanvas.width : fullCanvas.width / 2;
       const pivotY = pivot ? pivot.y * fullCanvas.height : fullCanvas.height / 2;
@@ -74,6 +80,11 @@ export function compositeAnnotations(
           baseCanvas.width = sw;
           baseCanvas.height = sh;
           const cropCtx = baseCanvas.getContext("2d")!;
+          const rectBg = crop.background || background;
+          if (rectBg && rectBg !== "transparent") {
+            cropCtx.fillStyle = rectBg === "black" ? "#000000" : "#ffffff";
+            cropCtx.fillRect(0, 0, sw, sh);
+          }
           cropCtx.drawImage(fullCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
         }
       } else {

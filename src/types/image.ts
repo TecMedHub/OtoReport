@@ -1,6 +1,6 @@
 import type { Annotation, CropData } from "./annotation";
 
-export type EarSide = "left" | "right";
+export type EarSide = "left" | "right" | "pre_left" | "pre_right" | "post_left" | "post_right";
 
 export interface EarImage {
   id: string;
@@ -14,4 +14,5 @@ export interface EarImage {
   notes: string;
   annotations: Annotation[];
   crop?: CropData | null;
+  background?: "black" | "white" | "transparent";
 }

@@ -1,7 +1,10 @@
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { WorkspaceProvider, useWorkspace } from "@/hooks/useWorkspace";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { ToastProvider } from "@/components/ui/Toast";
+import { KonamiEasterEgg } from "@/components/KonamiEasterEgg";
 import { WorkspaceSetup } from "@/components/setup/WorkspaceSetup";
+import { ProfileSelector } from "@/components/setup/ProfileSelector";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Dashboard } from "@/pages/Dashboard";
 
@@ -30,6 +33,16 @@ const router = createHashRouter([
           import("@/pages/ReportHistory").then((m) => ({ Component: m.ReportHistory })),
       },
       {
+        path: "findings-library",
+        lazy: () =>
+          import("@/pages/FindingsLibrary").then((m) => ({ Component: m.FindingsLibrary })),
+      },
+      {
+        path: "contribute/:findingKey",
+        lazy: () =>
+          import("@/pages/ContributeFinding").then((m) => ({ Component: m.ContributeFinding })),
+      },
+      {
         path: "settings",
         lazy: () => import("@/pages/Settings").then((m) => ({ Component: m.Settings })),
       },
@@ -38,12 +51,12 @@ const router = createHashRouter([
 ]);
 
 function AppContent() {
-  const { workspacePath, loading } = useWorkspace();
+  const { workspacePath, loading, profiles, profileSelected } = useWorkspace();
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="flex h-screen items-center justify-center bg-bg-primary">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent border-t-transparent" />
       </div>
     );
   }
@@ -52,16 +65,23 @@ function AppContent() {
     return <WorkspaceSetup />;
   }
 
+  if (profiles.length > 1 && !profileSelected) {
+    return <ProfileSelector />;
+  }
+
   return <RouterProvider router={router} />;
 }
 
 function App() {
   return (
-    <ToastProvider>
-      <WorkspaceProvider>
-        <AppContent />
-      </WorkspaceProvider>
-    </ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <WorkspaceProvider>
+          <AppContent />
+          <KonamiEasterEgg />
+        </WorkspaceProvider>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 
