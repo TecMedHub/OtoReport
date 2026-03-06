@@ -17,7 +17,8 @@ import { useToast } from "@/components/ui/Toast";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { ImageAnnotator } from "@/components/annotation/ImageAnnotator";
 import { getFindingsLibrary } from "@/lib/findings-library";
-import type { Annotation, CropData } from "@/types/annotation";
+import { compositeAnnotations } from "@/lib/annotation-renderer";
+import type { Annotation, FrameShape } from "@/types/annotation";
 
 const INDEX_URL =
   "https://raw.githubusercontent.com/TecMedHub/Otoreports_findings/main/json/index.json";
@@ -33,6 +34,48 @@ function getNextFilename(
   // Siguiente número: contar existentes + 1 (la primera no tiene número)
   const nextNum = existingEntries.length + 1;
   return `${findingKey}_${nextNum}.webp`;
+}
+
+/** Agrega marca de agua con el nombre del contribuidor en la esquina inferior derecha */
+function addWatermark(dataUrl: string, name: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0);
+
+      const fontSize = Math.max(14, Math.round(img.width * 0.025));
+      const padding = Math.round(fontSize * 0.6);
+      const text = `© ${name}`;
+
+      ctx.font = `${fontSize}px sans-serif`;
+      const metrics = ctx.measureText(text);
+
+      // Fondo semitransparente
+      const bgHeight = fontSize + padding;
+      const bgWidth = metrics.width + padding * 2;
+      const x = img.width - bgWidth - padding;
+      const y = img.height - bgHeight - padding;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+      ctx.beginPath();
+      ctx.roundRect(x, y, bgWidth, bgHeight, fontSize * 0.25);
+      ctx.fill();
+
+      // Texto blanco
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.font = `${fontSize}px sans-serif`;
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x + padding, y + bgHeight / 2);
+
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
 }
 
 export function ContributeFinding() {
@@ -51,7 +94,7 @@ export function ContributeFinding() {
   const [imageBytes, setImageBytes] = useState<Uint8Array | null>(null);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const [rotation, setRotation] = useState(0);
-  const [crop, setCrop] = useState<CropData | null>(null);
+  const [frameShape, setFrameShape] = useState<FrameShape | null>(null);
   const [background, setBackground] = useState<"black" | "white" | "transparent">("black");
   const [showAnnotator, setShowAnnotator] = useState(false);
   const [generating, setGenerating] = useState(false);
@@ -91,19 +134,19 @@ export function ContributeFinding() {
     // Reset annotations when new image selected
     setAnnotations([]);
     setRotation(0);
-    setCrop(null);
+    setFrameShape(null);
   }, [t]);
 
   const handleAnnotatorSave = useCallback(
     (
       newAnnotations: Annotation[],
       newRotation: number,
-      newCrop?: CropData | null,
+      newFrameShape?: FrameShape | null,
       newBg?: "black" | "white" | "transparent"
     ) => {
       setAnnotations(newAnnotations);
       setRotation(newRotation);
-      setCrop(newCrop ?? null);
+      setFrameShape(newFrameShape ?? null);
       if (newBg) setBackground(newBg);
       setShowAnnotator(false);
     },
@@ -111,7 +154,7 @@ export function ContributeFinding() {
   );
 
   const generateZip = useCallback(async () => {
-    if (!imageBytes || !findingKey) return;
+    if (!imageBytes || !findingKey || !imageDataUrl) return;
 
     const imageFilename = getNextFilename(findingKey, existingEntries);
 
@@ -123,6 +166,27 @@ export function ContributeFinding() {
 
     setGenerating(true);
     try {
+      // Renderizar imagen con anotaciones
+      const composited = await compositeAnnotations(
+        imageDataUrl,
+        annotations,
+        rotation,
+        null,
+        frameShape,
+        background,
+      );
+
+      // Agregar marca de agua con el nombre del contribuidor
+      const watermarked = await addWatermark(composited, contributorName);
+
+      // Convertir data URL a bytes
+      const base64 = watermarked.split(",")[1];
+      const binaryStr = atob(base64);
+      const watermarkedBytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        watermarkedBytes[i] = binaryStr.charCodeAt(i);
+      }
+
       const metadata = {
         findingKey,
         file: imageFilename,
@@ -133,12 +197,12 @@ export function ContributeFinding() {
       const annotationsData = {
         annotations,
         rotation,
-        crop,
+        frameShape,
         background,
       };
 
       await invoke("create_contribution_zip", {
-        imageData: Array.from(imageBytes),
+        imageData: Array.from(watermarkedBytes),
         imageFilename,
         annotationsJson: JSON.stringify(annotationsData, null, 2),
         metadataJson: JSON.stringify(metadata, null, 2),
@@ -151,7 +215,7 @@ export function ContributeFinding() {
     } finally {
       setGenerating(false);
     }
-  }, [imageBytes, findingKey, contributorName, existingEntries, annotations, rotation, crop, background, toast, t]);
+  }, [imageBytes, imageDataUrl, findingKey, contributorName, existingEntries, annotations, rotation, frameShape, background, toast, t]);
 
   if (!finding) {
     return (
@@ -170,10 +234,9 @@ export function ContributeFinding() {
         imageUrl={imageDataUrl}
         annotations={annotations}
         rotation={rotation}
-        crop={crop}
+        frameShape={frameShape}
         background={background}
         onSave={handleAnnotatorSave}
-        onClose={() => setShowAnnotator(false)}
       />
     );
   }
